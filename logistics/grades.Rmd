@@ -1,0 +1,95 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+```{r}
+grades <- read_csv("~/Downloads/grades.csv") |>
+  rename(final_score = `Final Score`) |>
+  mutate(final_score = as.numeric(final_score))
+
+quantiles <- c(0, 0.05, 0.1, 0.3, 0.45, 0.65, 0.75, 1)
+quantile_values <- round(quantile(grades$final_score, quantiles), 1)
+letters <- c("F", "D", "C", "BC", "B", "AB", "A")
+
+percents <- c(0, 60, 70, 78, 82, 88, 92, 100)
+percent_levels <- str_c("(", head(percents, -1), ",", tail(percents, -1), "]")
+quantile_levels <- str_c("(", head(quantile_values, -1), ",", tail(quantile_values, -1), "]")
+
+grades <- grades |>
+  mutate(
+    quantile = cut(final_score, quantile_values, include.lowest = TRUE),
+    grade_v1 = factor(cut(final_score, percents)),
+    grade_v1 = fct_recode(grade_v1, !!!setNames(percent_levels, letters)),
+    grade_v2 = factor(cut(final_score, quantile_values)),
+    grade_v2 = fct_recode(grade_v2, !!!setNames(quantile_levels, letters))
+  )
+```
+
+```{r}
+grades$`Current Score`
+```
+
+
+```{r}
+grades |>
+  select(Student, final_score, grade_v1, grade_v2) |>
+  arrange(desc(final_score))
+```
+
+```{r, eval = FALSE}
+grades <- read_csv("2024-10-21T2336_Grades-FA24_STAT_436_001.csv") |>
+    filter(row_number() > 2) |>
+    mutate(across(starts_with("Midterm"), as.numeric)) |>
+    rename(Midterm = `Midterm (2361623)`)
+
+grades2 <- read_csv("2024-10-22T1059_Grades-FA24_STAT_436_003.csv") |>
+    filter(row_number() > 2) |>
+    mutate(across(starts_with("Midterm"), as.numeric)) |>
+    rename(Midterm = `Midterm (2400326)`)
+
+grades <- bind_rows(grades, grades2)
+
+ggplot(grades) +
+  scale_x_continuous(expand = c(0, 0)) +
+  geom_dotplot(aes(Midterm), stackratio = 1.5, dotsize = 0.5, binwidth = 0.5) +
+  labs(x = "Score", y = "Count") +
+  theme(
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 24),
+    axis.title = element_text(size = 28)
+  )
+#ggsave("~/Desktop/teaching/course_exercises/stat436_f24/figure/midterm.png", height = 3 * 1.1, width = 8 * 1.1)
+
+# grades |>
+#   mutate(final_score = final_score + 1) |>
+#   write_csv("~/Downloads/grades.csv")
+
+summary(grades$final_score)
+table(grades$grade_v1) / nrow(grades)
+```
+
+```{r}
+grades |>
+  select(Student, grade_v1, final_score) |>
+  print(n = 200)
+```
