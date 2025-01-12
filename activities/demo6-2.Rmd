@@ -1,0 +1,155 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(tsibble)
+library(feasts)
+library(plotly)
+library(slider)
+library(shiny)
+theme_set(theme_bw())
+```
+
+[Global Carbon Footprint Network II] This problem creates interactive versions
+of the carbon emissions dataset introduced in the previous problem.
+
+a. Using `ggplotly`, create a line plot where country names can be revelaed
+on hover.
+
+This code is copied from the previous demo.
+
+```{r}
+carbon <- read_csv("https://go.wisc.edu/7qx7u1")
+carbon_ts <- carbon |>
+  pivot_longer(-c("country", "Country Code"), names_to = "year") |>
+  filter(country != "Switzerland") |>
+  mutate(year = as.integer(year)) |>
+  as_tsibble(index = year, key = country)
+
+smoothed_carbon <- carbon_ts |>
+  group_by(country) |>
+  mutate(smoothed = slide_dbl(value, ~ mean(.), .before = 5, .after = 5)) |>
+  ungroup()
+```
+
+We now construct a plotly object from the ggplot time series.
+
+```{r}
+p <- ggplot(smoothed_carbon) +
+  geom_line(aes(year, smoothed, group = country))
+ggplotly(p)
+```
+
+What if we want to be able to hover and get the country names?
+
+b. Propose an interactive time series visualization that graphically queries a
+time series feature (or several features) that can be generated using the
+`feasts` package. What questions is your visualization particularly well-suited
+to? What questions is it not appropriate for?
+
+We will try querying series according to their `spikiness` and `curvature`. The
+graphical query will allow us to highlight countries using a scatterplot of
+these feature values.
+
+c. Implement your proposal from part (b).
+
+```{r}
+trends <- smoothed_carbon |>
+  features(value, features = feature_set(tags = "trend")) |>
+  mutate(log_spikiness = log(spikiness))
+
+carbon_trends <- smoothed_carbon |>
+  left_join(trends)
+```
+
+```{r}
+ui <- fluidPage(
+  fluidRow(
+    column(6, plotOutput("scatter", brush = "brush")),
+    column(6, plotlyOutput("trends"))
+  )
+)
+
+server <- function(input, output) {
+  selected <- reactiveVal(rep(FALSE, nrow(carbon_trends)))
+  observeEvent(
+    input$brush, {
+      selected(brushedPoints(carbon_trends, input$brush, allRows = TRUE)$selected_)
+  })
+  
+  mutated_trends <- reactive({
+    carbon_trends |>
+      mutate(selected = selected())
+  })
+  
+  output$scatter <- renderPlot({
+    ggplot(mutated_trends()) +
+      geom_point(aes(log_spikiness, curvature, col = selected), size = 2) +
+      scale_color_manual(values = c("#B0D1D9", "#273859"), guide = "none")
+  })
+  
+  output$trends <- renderPlotly({
+    current <- mutated_trends()
+    if (any(current$selected)) {
+      p <- current |>
+        filter(selected) |>
+        ggplot() +
+        geom_line(aes(year, smoothed, group = country), col = "#273859") +
+        theme(legend.position = "none")
+      ggplotly(p)
+    }
+  })
+}
+
+shinyApp(ui, server)
+```
+
+Here is an alternative solution that supports mouseover only for the selected countries.
+
+```{r}
+update_scatter <- function(carbon_trends, selected_) {
+    carbon_trends |>
+        mutate(selected = selected_) |>
+        ggplot() +
+            geom_point(aes(log_spikiness, trend_strength, col = selected_)) +
+            scale_color_manual(values = c("#e4e4e4", "black")) +
+            theme(legend.position = "none")
+}
+
+update_trends <- function(carbon_trends, selected_) {
+    p <- ggplot(carbon_trends, aes(year, smoothed, group = country))
+    if (all(selected_)) {
+        p <- p + geom_line(col = "black")
+    } else if (all(!selected_)) {
+        p <- p + geom_line(col = "#e4e4e4", alpha = 0.3)
+    } else {
+        p <-  p +
+            geom_line(data = filter(carbon_trends, selected_), col = "black") +
+            geom_line(data = filter(carbon_trends, !selected_), col = "#e4e4e4", alpha = 0.3)
+    }
+
+    ggplotly(p) |>
+        style(hoverinfo = "none", traces = 2)
+}
+
+server <- function(input, output) {
+  selected <- reactiveVal(rep(FALSE, nrow(carbon_trends)))
+  observeEvent(
+    input$brush, {
+        selected(brushedPoints(carbon_trends, input$brush, allRows = TRUE)$selected_)
+  })
+  
+  output$scatter <- renderPlot(update_scatter(carbon_trends, selected()))
+  output$trends <- renderPlotly(update_trends(carbon_trends, selected()))
+}
+
+shinyApp(ui, server)
+```
