@@ -1,0 +1,3297 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>slides</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.28/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+# STAT 436: Statistical Data Visualization
+
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+
+## Spring 2025
+
+
+
+---
+
+
+### Welcome!!
+
+I'm excited to share this course with you this semester. There are few
+activities that engage creative, quantitative, and critical thinking skills all
+at once -- data visualization is one of them.
+
+Nothing makes my day like a good data visualization, and I look forward to
+seeing those that you create.
+
+---
+
+### Syllabus
+
+* Learning outcomes
+* Teaching team and office hours
+* Assessments
+* Grading
+
+---
+
+### Learning Outcomes
+
+1.	Develop a vocabulary of visual encodings that support exploration of
+geospatial, temporal, tree-structured, and network data, and demonstrate
+facility implementing them using packages in the R programming language.
+1.	Design dynamic queries that support interactive visualization of
+heterogeneous data, and demonstrate facility implementing them using the shiny
+package in the R programming language.
+1.	Design effective visualizations to summarize the results of dimensionality
+reduction and clustering algorithms.
+
+---
+
+### Learning Outcomes
+
+1.	Use visual artifacts derived from complex statistical and machine learning
+models to discuss the patterns they learn and mistakes they make.
+1.	Evaluate strengths and weaknesses of visualizations in relation to the tasks
+they support.
+
+---
+
+
+### Office Hours
+
+_Instructor_
+
+* Kris Sankaran [ksankaran@wisc.edu] 
+
+_TAs_
+
+* Matt Sathitvudh [sathitvudh@wisc.edu] 
+* Cameron Jones [cjones46@wisc.edu]
+
+We will announce in-person and virtual office hours depending on the results of
+the poll on the syllabus. Submit your preferences by **Sunday  at Noon**.
+
+---
+
+
+### Assessments
+
+.pull-left[
+* In-class exercises and discussions
+* 5 Homework assignments
+  - 3 Portfolio + 2 Exercise Sheet
+* 3 group project reports, 1 presentation
+  - Teams of 4 - 6 people
+* 1 midterm exam
+  - In-class on **March 4**
+  - 1 page cheat sheet
+]
+
+.pull-right[
+* In-Class Exercises: 15%
+* Midterm: 20%
+* Homework: 40%
+* Group Project: 25%
+]
+
+---
+
+### Generative AI
+
+1. There is evidence that while tools like ChatGPT and GitHub Copilot can
+dramatically improve programming productivity&lt;sup&gt;1&lt;/sup&gt;, they can also have
+negative effects on learning&lt;sup&gt;2&lt;/sup&gt;.
+
+1. In this course, we will follow a middle path. Before the midterm, you may not
+use any generative AI tools to write data visualization code. This will ensure
+everyone has a strong foundation. After the midterm, generative AI is allowed,
+and we will practice using example tools together.
+
+ .footnote[1: Weber, Thomas, et al. ‘Significant Productivity Gains through Programming with Large Language Models’. Proceedings of the ACM on Human-Computer Interaction, vol. 8, no. EICS, Association for Computing Machinery (ACM), June 2024, pp. 1–29, https://doi.org/10.1145/3661145.
+
+ 2: Bastani, Hamsa and Bastani, Osbert and Sungu, Alp and Ge, Haosen and Kabakcı, Özge and Mariman, Rei, Generative AI Can Harm Learning (July 15, 2024). The Wharton School Research Paper, Available at SSRN: https://ssrn.com/abstract=4895486 or http://dx.doi.org/10.2139/ssrn.4895486]
+
+---
+
+### Class Resources
+
+1. [Canvas page](https://canvas.wisc.edu/courses/450230)
+  - Links to all other resources
+1. [Online notes](https://krisrs1128.github.io/stat436_s25/)
+1. [Online recordings](https://mediaspace.wisc.edu/channel/STAT+479%3A+Statistical+Data+Visualization/197911113) (also linked in notes)
+1. [Piazza](https://piazza.com/wisc/spring2025/sp25stat436001/home/)
+1. [Worked code examples](https://github.com/krisrs1128/stat436_s25/tree/main/activities/)
+1. [Readings](https://github.com/krisrs1128/stat436_s25/raw/main/logistics/syllabus.docx) (Page 3 of Syllabus)
+
+---
+
+### Preparation
+
+* For the next lecture, bring your laptops.
+* Make sure you can run the starter code for the in-class demo.
+  - I recommend using Rstudio.
+  - You can install the tidyverse package using:
+  
+
+``` r
+install.packages("tidyverse")
+```
+
+---
+
+### Advice from Previous Students
+
+Past Advice: [https://go.wisc.edu/cs8u39](https://go.wisc.edu/cs8u39)
+
+"Read weekly notes before classes and exams because it contains lots of useful information"
+
+"Don’t be afraid to talk and interact with the people around you! I found working together with other students on the discussions and demos allowed me to understand the material quicker."
+
+"I highly recommend keeping up with the videos that are posted for each lecture. They are short and you don’t necessarily need to take notes, but it is very helpful to learn the content this way if you find yourself confused."
+
+---
+
+### Questions?
+
+Also feel free to speak with me after class.
+
+---
+
+### Discussion 1 - 1
+
+1. Introduce yourself to your neighbors. Share your name, degree program, and
+one of: a recent hobby, favorite movie, favorite food.
+
+1. Respond to the following prompt at the "Discussion 1 - 1" link on Canvas.
+
+&gt; What personal values do you bring to the practice of data visualization? How might your values translate into aspects of the visualizations that you create? Be as specific as possible.
+&gt; 
+&gt; For example: If one value is "Transparency," then you might release code used to prepare the data and make the visualization.
+
+---
+
+### Exercise 1 - 1
+
+1. Submit a response to [Formulating Questions] on Canvas and share your chosen
+dataset with your neighbors.
+
+1. We will not grade the plot's quality -- we just want to get a sense of
+everyone's starting point.
+
+---
+
+### Exercise 1 - 1
+
+[Formulating Questions] Pick a dataset from
+[TidyTuesday](https://github.com/rfordatascience/tidytuesday#datasets), [Data Is Plural](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0),
+[Kaggle Datasets](https://www.kaggle.com/datasets), [Google Dataset Search](https://datasetsearch.research.google.com/), [AWS Data Registry](https://registry.opendata.aws/), [Wisconsin DNR](https://data-wi-dnr.opendata.arcgis.com/), [IPUMS](https://www.ipums.org/), [538](https://github.com/fivethirtyeight/data/), [Buzzfeed](https://github.com/BuzzFeedNews), [Propublica](https://www.propublica.org/datastore), [LILA BC](https://lila.science/datasets/), ..., or your own personal
+studies that you would like to visualize this semester. 
+
+* What makes you interested in this dataset? What questions does it help to answer?
+
+* Using any tools of your choice, make one example visualization from your
+dataset. What was your thought process behind the design of this visualization?
+This will not be evaluated except for effort -- the purpose of the problem is to
+create a record your data visualization skills at the start of the course.
+Submit both your visualization and code used to create it.
+
+---
+
+### Week 1 - 2
+
+1. Review Exercise 1 - 1
+1. In-Class Demo 1 - 1
+1. In-Class Exercise 1 - 2
+
+---
+
+### Announcements
+
+1. We will accept responses to the Office Hours Poll
+(https://go.wisc.edu/ez34og) until Sunday at noon. Let us know your preferences!
+1. Project Milestones 0 and 1 have been posted.
+1. HW1 has been posted.
+1. Please sign up (with your team) for a Visualization Share by **February 4**.
+
+---
+
+### Beautiful Visualizations - Comments?
+
+.pull-left[
+&lt;img src="figure/iau_figure.png" width=400/&gt;
+]
+
+.pull-right[
+[Source](https://www.behance.net/gallery/78642081/IAU100-exhibition-data-visualization-and-graphics)
+
+[Plot background](https://stackoverflow.com/questions/51255832/how-to-add-an-image-on-ggplot-background-not-the-panel)
+]
+
+---
+
+### [In-Class Demo 1 - 1]
+
+We will work through [Penguins] from the exercise sheet. We'll also see how you
+can create an HTML or PDF submission.
+
+* Live Demos: https://go.wisc.edu/6yuq9m
+
+---
+
+### Exercise 1 - 2
+
+Respond to [ggplot2 Flipbook] parts (a - b) in the exercise sheet:
+
+Gina Reynolds has prepared a [ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+that illustrates how ggplot2 figures are built up layer-by-layer, using the
+concept of "slow ggplotting." This helps to clarify what each step of a long
+ggplot2 command actually does, and it also lets you see how rough, initial plots
+can be gradually improved into refined, final versions.
+
+  a. Pick one of the flipbook visualizations to study. Compare and contrast
+  the initial vs. final versions of the plot. What do you think motivated
+  these design choices?
+
+  b. Did you learn any new ggplot2 tricks from reading the example? Explain.
+
+---
+
+## Week 2 - 1
+
+1. Warm-Up: Visual Resdesigns
+1. In-Class Discussion/Demo 2 - 1
+1. In-Class Exercise 2 - 1
+
+---
+
+### Announcements
+
+* Office Hours have been set.
+  - Kris, 
+  - Matt, 
+  - Cameron
+* A past midterm is posted under Week 6 on Canvas.
+* Upcoming Deadlines
+  - Project Milestone 0 (Form project groups)
+  - Sign up on Visualization Shares schedule
+  - Project Milestone 1
+  - HW1
+
+---
+
+### Warm-Up: Visual Redesigns
+
+.pull-left[
+These two visualizations are discussed in the article, ["Design and Redesign"](https://medium.com/@hint_fm/design-and-redesign-4ab77206cf9) by Martin Wattenberg and Fernanda Viegas.
+]
+
+.pull-right[
+  &lt;img src="figure/accurat_authors.png" width=700/&gt;
+  [Original, by Giorgia Lupi](https://i0.wp.com/www.themarginalian.org/wp-content/uploads/2013/11/accurat_novels_large2.jpg?w=680&amp;ssl=1)
+]
+
+---
+
+### Warm-Up: Visual Redesigns
+
+.pull-left[
+These two visualizations are discussed in the article, ["Design and Redesign"](https://medium.com/@hint_fm/design-and-redesign-4ab77206cf9) by Martin Wattenberg and Fernanda Viegas.
+]
+
+.pull-right[
+  &lt;img src="figure/cairo_redesign.png" width=440/&gt;
+  Redesign by Alberto Cairo
+]
+
+---
+
+* What are the important differences? Critique both approaches.
+* How should we think about redesigns, to ensure respect and progress in the visualization community?
+
+.pull-left[
+  &lt;img src="figure/accurat_authors.png" width=480/&gt;
+]
+.pull-right[
+  &lt;img src="figure/cairo_redesign.png" width=430/&gt;
+]
+
+
+---
+exclude: true
+
+### Exercise Review
+
+.center[
+  &lt;img src="figure/info-food-waste.png" width=700/&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review
+
+* What is the meaning of these scales? Are 20 million slices of bread really
+comparable to 290,000 kg of poultry? What about CO2 equivalents?
+* A barchart would make quantitative comparisons much easier, especially for
+smaller circles
+* Bright pink background...
+* The text is sometimes quite small
+* Are apples really vegetables??
+* The icons are nice
+
+---
+exclude: true
+
+### Exercise Review
+
+.center[
+ &lt;img src="figure/mosquito-predators.jpeg" width=600/&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review
+
+* This is actually quite elegant, though the visualization form is not that
+standard.
+* Several responses commented that additional labeling or color would help. Some of the existing annotation lacks context. I
+would caution that these additions should not come at the cost of the current
+information density.
+* In an interactive version, it would be nice to be able to filter by predation
+type
+
+---
+exclude: true
+
+### Exercise Review
+
+.center[
+ &lt;img src="figure/elife_sunflower.jpeg" width=500/&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review
+
+* This is a very dense visualization, appropriate for a scientific venue, but
+requiring significant time to parse (though if a lot is learned through the
+process, this need not be a bad thing)
+* Having the scatterplot icons look like the properties of the sunflowers they
+are studying was a brilliant idea.
+* The linking of the same color across many subplots is a good practice.
+However, the circle sizes are not consistent between (a) and (b).
+* Some of the text makes the figure unnecessarily busy. E.g., do we really need
+to know latitude and longitude?
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Explain the "tidy data" principle and its relevance to data visualization.
+* Reshape data using the pivot functions in the `tidyr` package.
+
+---
+
+### In-Class Demo [2 - 1]
+
+We will work through [Plant Growth Experiment] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+First, familiarize yourself with the question and respond to Discussion [2 - 1]
+linked on Canvas.
+
+---
+
+### Notebook Submissions
+
+* Make sure to remove extraneous package loading messages from your
+exercise and homework solutions.
+* There are ways to customize the output colors, fonts, etc.
+  - Examples: The `bslib` or `rmdformats` packages
+* Let's look at how to do this with the previous demo.
+
+---
+
+### In-Class Exercise [2 - 1]
+
+Submit an answer to [Code Analysis] from the exercises sheet.
+
+&gt; [Code Analysis] Pick one code example from this week’s lecture notes. Provide a
+3 - 4 sentence summary of the overall implementation strategy. Then, add
+comments every 10 - 15 lines describing what each section of code is doing. If
+there are parts that you do not understand, add a ??? next to it (we will review
+these in the next lecture).
+
+---
+
+## Week 2 - 2
+
+1. Review Exercise 2 - 1
+1. In-Class Discussion 2 - 2
+1. In-Class Demo 2 - 2
+1. In-Class Exercise 2 - 2
+
+---
+
+### Announcements
+
+* Nathan's OH have been set to Mondays 12-2pm in Medical Sciences Center B315A
+* Upcoming Deadlines
+  - Project Milestone 0
+  - Project Milestone 1
+  - HW1
+* Sign-up with your team on the visualization shares schedule.
+
+---
+
+### Beautiful Visualizations - Comments?
+
+.pull-left[
+  &lt;img src="figure/oscar_bump.jpg" width=400/&gt; 
+]
+
+.pull-right[
+  [Source](https://www.ft.com/content/4a2e9b05-463d-491c-af4e-2b0466cb8c63): Nomadland, Disney and the drive for Oscars dominance in 2021 (Financial Times)
+]
+
+---
+
+### Beautiful Visualizations - Comments?
+
+.pull-left[
+&lt;img src="figure/djokovic.jpeg" width=350/&gt;
+]
+
+.pull-right[
+[Source](https://ig.ft.com/sites/novak-djokovic-the-best-tennis-season-ever/): Djokovic’s 2015 was the greatest ever men's tennis season (Financial Times)
+]
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Apply the `group_by + summarise` pattern to compute summary statistics across subsets of samples in a dataset.
+* Transform a dataset in place using functions from the tidyverse: `mutate`, `rename`, `str_*`, `unnest_*`.
+
+---
+
+exclude: true
+
+### Exercise Review 2 - 1
+
+Let's review pipe syntax in R. The main idea is to avoid storing intermediate
+computations.
+
+.pull-left[
+
+``` r
+df2 &lt;- f(df1)
+df3 &lt;- g(df2)
+```
+]
+
+.pull-right[
+
+``` r
+df3 &lt;- df1 |&gt;
+  f() |&gt;
+  g()
+```
+]
+
+---
+exclude: true
+
+### Exercise Review 2 - 1
+
+The theme only applies to visualizations **after** the `theme_set` call.
+
+
+``` r
+# set the theme
+my_theme &lt;- theme_bw() +
+  theme(
+    axis.title = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    axis.text = element_text(size = 14),
+    legend.text = element_text(size = 14),
+    strip.text = element_text(size = 16)
+  )
+theme_set(my_theme)
+#?? i don't know why the theme doesn't setted.
+```
+
+---
+exclude: true
+
+### Exercise Review 2 - 1
+
+
+``` r
+theme_set(theme_grey())
+ggplot(mtcars) +
+   geom_point(aes(mpg, hp))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-5-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+### Exercise Review 2 - 1
+
+
+``` r
+my_theme &lt;- theme_bw() +
+  theme(
+    axis.title = element_text(size = 16),
+    legend.title = element_text(size = 16),
+    axis.text = element_text(size = 14),
+    legend.text = element_text(size = 14),
+    strip.text = element_text(size = 16)
+  )
+theme_set(my_theme)
+ggplot(mtcars) +
+  geom_point(aes(mpg, hp))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-6-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+How does `str_extract` work?
+
+&lt;img src="figure/confusion/2-1-3.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+The plants demo used a regular expression ("regex") to extract the day number from the column names. 
+
+
+``` r
+str_extract("height.14", "[0-9]") 
+```
+
+```
+## [1] "1"
+```
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+
+``` r
+str_extract("height.14", "[0-9]+") 
+```
+
+```
+## [1] "14"
+```
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+
+``` r
+str_extract("height.14.test.21", "[0-9]+") 
+```
+
+```
+## [1] "14"
+```
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+
+``` r
+str_extract_all("height.14.test.21", "[0-9]+") 
+```
+
+```
+## [[1]]
+## [1] "14" "21"
+```
+
+Hint: https://regexr.com/ is useful for learning and testing regexes. 
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+More details about `starts_with()` and `interaction()`?
+
+&lt;img src="figure/confusion/2-1-2.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+* `starts_with()` selects any columns that that match a condition. Here, it says which columns to collapse into a new "name" column.
+* `interaction` defines a temporary factor variable that looks at all combinations 
+
+
+``` r
+ggplot(plants_reshaped) + 
+  geom_line(aes(day, value, group = interaction(plantid, treatment), col = treatment)) 
+```
+
+`group` specifies what each line should correspond to. so here, it corresponds 
+to `plantid x treatment` combinations. 
+
+---
+
+exclude: true
+### Exercise Review 2 - 1 
+
+
+``` r
+interaction(1:4, c("a", "b", "c")) 
+```
+
+```
+## [1] 1.a 2.b 3.c 4.a
+## Levels: 1.a 2.a 3.a 4.a 1.b 2.b 3.b 4.b 1.c 2.c 3.c 4.c
+```
+
+---
+
+
+exclude: true
+### Exercise Review 2 - 1
+
+&lt;img src="figure/confusion/2-1-4.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+1. If we are going to apply the same data transformation to many datasets, then
+it's worth encapsulating it into a function.
+
+1. Whenever I'm tempted to copy and paste code, I think of writing a function.
+
+
+``` r
+table4a |&gt;
+    pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")
+
+table4b |&gt;
+    pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "population")
+```
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+1. If we are going to apply the same data transformation to many datasets, then
+it's worth encapsulating it into a function.
+
+1. Whenever I'm tempted to copy and paste code, I think of writing a function.
+
+
+``` r
+pivot_fun &lt;- function(x, value_column = "cases") {
+  x %&gt;%
+    pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = value_column)
+}
+
+pivot_fun(table4a)
+pivot_fun(table4b, "population")
+```
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+&lt;img src="figure/confusion/2-1-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+exclude: true
+### Exercise Review 2 - 1
+
+These are age ranges! E.g., "1524" means ages "15 - 24."
+
+
+``` r
+head(who)
+```
+
+```
+## # A tibble: 6 × 60
+##   country     iso2  iso3   year new_sp_m014 new_sp_m1524 new_sp_m2534 new_sp_m3544 new_sp_m4554
+##   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+## 1 Afghanistan AF    AFG    1980          NA           NA           NA           NA           NA
+## 2 Afghanistan AF    AFG    1981          NA           NA           NA           NA           NA
+## 3 Afghanistan AF    AFG    1982          NA           NA           NA           NA           NA
+## 4 Afghanistan AF    AFG    1983          NA           NA           NA           NA           NA
+## 5 Afghanistan AF    AFG    1984          NA           NA           NA           NA           NA
+## 6 Afghanistan AF    AFG    1985          NA           NA           NA           NA           NA
+## # ℹ 51 more variables: new_sp_m5564 &lt;dbl&gt;, new_sp_m65 &lt;dbl&gt;, new_sp_f014 &lt;dbl&gt;, new_sp_f1524 &lt;dbl&gt;,
+## #   new_sp_f2534 &lt;dbl&gt;, new_sp_f3544 &lt;dbl&gt;, new_sp_f4554 &lt;dbl&gt;, new_sp_f5564 &lt;dbl&gt;,
+## #   new_sp_f65 &lt;dbl&gt;, new_sn_m014 &lt;dbl&gt;, new_sn_m1524 &lt;dbl&gt;, new_sn_m2534 &lt;dbl&gt;,
+## #   new_sn_m3544 &lt;dbl&gt;, new_sn_m4554 &lt;dbl&gt;, new_sn_m5564 &lt;dbl&gt;, new_sn_m65 &lt;dbl&gt;,
+## #   new_sn_f014 &lt;dbl&gt;, new_sn_f1524 &lt;dbl&gt;, new_sn_f2534 &lt;dbl&gt;, new_sn_f3544 &lt;dbl&gt;,
+## #   new_sn_f4554 &lt;dbl&gt;, new_sn_f5564 &lt;dbl&gt;, new_sn_f65 &lt;dbl&gt;, new_ep_m014 &lt;dbl&gt;,
+## #   new_ep_m1524 &lt;dbl&gt;, new_ep_m2534 &lt;dbl&gt;, new_ep_m3544 &lt;dbl&gt;, new_ep_m4554 &lt;dbl&gt;, …
+```
+
+---
+
+exclude: true
+
+### Exercise Review 2 - 1 
+
+
+
+
+``` r
+ggplot(plants_long) + 
+  geom_point(aes(time, height))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-22-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+### Exercise Review 2 - 1
+
+
+``` r
+ggplot(plants_long) +
+  geom_point(aes(interaction(time, treatment), height)) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-23-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+### In-Class Discussion [2 - 2]
+
+In small groups, discuss the prompt below. Prepare a response on the google doc
+linked under "Discussion [2 - 2]" on Canvas.
+
+&gt; Critique one of the three visualizations discussed in [Critique - Infographic] or [Critique - Science Paper] of the Exercise Sheet. Respond to all parts of the problem description.
+
+---
+
+### In-Class Demo [2 - 2]
+
+We will work through [Olympics Derivations] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+Starter code and solutions on Canvas.
+
+---
+
+### In-Class Exercise [2 - 2]
+
+Work through [Ikea Furniture] part (a) in the exercise sheet.
+
+If you finish part (a) during class, try to complete (b - c) as well.
+
+---
+
+[Ikea Furniture] The dataset below shows prices of pieces of Ikea furniture.
+We will compare prices of different furniture categories and label the
+(relatively few) articles which cannot be bought online.
+
+* Make a plot that shows the relationship between the `category` of furniture
+and `price` (on a log-scale). Show each `item_id` as a point -- do not aggregate
+to boxplots or ridgelines -- but make sure to jitter and adjust the size the
+points to reduce the amount of overlap. _Hint: use `geom_jitter`._
+
+* Modify the plot in (a) so that categories are sorted from those with highest
+to lowest average prices.
+
+* Color points according to whether they can be purchased online. If they
+cannot be purchased online, add a text label giving the name of that item of
+furniture.
+
+---
+
+## Week 3 - 1
+
+1. In-Class Exercise Review [2 - 2]
+1. In-Class Discussion [3 - 1]
+1. In-Class Demo [3 - 1]
+1. In-Class Exercise [3 - 1]
+
+---
+
+### Announcements
+
+* Deadline for Project Milestone 0 (forming teams) extended to Friday 11:59pm.
+  - At that time, we will randomly assign students who are not in groups
+* Upcoming Deadlines
+  - Project Milestone 1
+  - HW1
+* Sign-up with your team for one of the visualization shares.
+
+---
+exclude: true
+
+### Exercise Review [2 - 2]
+
+a. Make a plot that shows the relationship between the category of furniture and
+price (on a log-scale). Show each item_id as a point – do not aggregate to
+boxplots or ridgelines – but make sure to jitter and adjust the size the points
+to reduce the amount of overlap.
+
+
+``` r
+ikea &lt;- read_csv("https://uwmadison.box.com/shared/static/iat31h1wjg7abhd2889cput7k264bdzd.csv")
+head(ikea)
+```
+
+```
+## # A tibble: 6 × 14
+##      X1  item_id name  category price old_price sellable_online link  other_colors short_description
+##   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;lgl&gt;           &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;            
+## 1     0 90420332 FREK… Bar fur…   265 No old p… TRUE            http… No           Bar table, in/ou…
+## 2     1   368814 NORD… Bar fur…   995 No old p… FALSE           http… No           Bar table,      …
+## 3     3 80155205 STIG  Bar fur…    69 No old p… TRUE            http… Yes          Bar stool with b…
+## 4     4 30180504 NORB… Bar fur…   225 No old p… TRUE            http… No           Wall-mounted dro…
+## 5     5 10122647 INGO… Bar fur…   345 No old p… TRUE            http… No           Bar stool with b…
+## 6     6 70404875 FRAN… Bar fur…   129 No old p… TRUE            http… No           Bar stool with b…
+## # ℹ 4 more variables: designer &lt;chr&gt;, depth &lt;dbl&gt;, height &lt;dbl&gt;, width &lt;dbl&gt;
+```
+
+---
+exclude: true
+
+### Exercise Review [2 - 2]
+
+
+``` r
+ggplot(ikea) +
+  geom_jitter(aes(category, price))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-25-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+
+``` r
+ggplot(ikea) +
+  geom_jitter(aes(category, price)) +
+  labs(x = "Category of Furniture", y = "Price ($)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-26-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+b. Modify the plot in (a) so that categories are sorted from those with highest
+to lowest average prices.
+
+
+``` r
+ggplot(ikea) +
+  geom_jitter(aes(reorder(category, price), price)) +
+  labs(x = "Category of Furniture", y = "Price ($)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-27-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+
+``` r
+ggplot(ikea) +
+  geom_jitter(aes(reorder(category, price), price)) +
+  labs(x = "Category of Furniture", y = "Price ($)") +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-28-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+c. Color points according to whether they can be purchased online. If they
+cannot be purchased online, add a text label giving the name of that item of
+furniture.
+
+
+``` r
+ggplot(ikea) +
+  geom_jitter(aes(reorder(category, price), price, col = sellable_online)) +
+  labs(x = "Category of Furniture", y = "Price ($)", col = "Available Online?") +
+  scale_y_log10() +
+  scale_color_manual(values = c("#400202", "#0596A6")) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    legend.position = "right"
+  )
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-29-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+
+``` r
+library(ggrepel)
+ggplot(ikea, aes(reorder(category, price), price)) +
+  geom_jitter(data = filter(ikea, sellable_online), aes(col = sellable_online), size = 1, alpha = 0.6) +
+  geom_jitter(data = filter(ikea, !sellable_online), aes(col = sellable_online), size = 3) +
+  geom_text_repel(data = filter(ikea, !sellable_online), aes(label = name), size = 4) +
+  labs(x = "Category of Furniture", y = "Price ($)", col = "Available Online?") +
+  scale_color_manual(values = c("#400202", "#0596A6")) +
+  scale_y_log10() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    legend.position = "right"
+  )
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-30-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Discuss settings where faceting is most likely to be beneficial (or not).
+* Create, critique, and refine faceted data visualizations, navigating choices like how to order facets and determine axis scales.
+
+---
+
+### In-Class Discussion [3 - 1]
+
+* On the Canvas link, response to *one* of the two prompt options.
+* The first prompt is related to the code demo we will work through. The second
+is related to the reading and notes for the week.
+* Discuss and answer the prompts with your project group. Include your project
+group number next to  your answer.
+
+---
+
+### In-Class Demo [3 - 1]
+
+We will work through [NCAA Trends] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [3 - 1]
+
+* Submit an answer to [Ikea Faceting] from the exercises sheet. Provide a brief explanation for your selection.
+* We only need one submission per project group -- make sure to name all your
+team members in the submission.
+* Note: This is an example of a past midterm problem.
+
+---
+
+## Week 3 - 2
+
+1. Exercise Review
+1. In-Class Demo [3-2]
+1. In-Class Exercise [3-2]
+
+---
+
+## Announcements
+
+* Deadline for Project Milestone 0 (forming teams) extended to Friday 11:59pm.
+  - At that time, we will randomly assign students who are not in groups
+  - If you want to to be randomly assigned before then, please let me know
+* If you have a team, please sign up on the Visualization Shares schedule
+  - Please make sure any relevant links are on the sign-up sheet
+* Upcoming Deadlines
+  - Project Milestone 1
+  - HW1
+
+---
+exclude: true
+
+### Exercise Review
+
+Here is the original histogram, without any faceting by category.
+
+
+``` r
+ikea &lt;- read_csv("https://uwmadison.box.com/shared/static/iat31h1wjg7abhd2889cput7k264bdzd.csv") %&gt;%
+          filter(category %in% c("Tables", "Bookcases", "Beds", "Cabinets", "Sofas", "Wardrobes"))
+p &lt;- ggplot(ikea) +
+  geom_histogram(aes(log(price)))
+p
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-31-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+### Exercise Review (Part (a))
+
+.pull-left[
+* `facet_grid` controls whether we explicitly arrange facets along rows or columns.
+* If we place the variable before the `~`, it arranges them along rows.
+]
+
+.pull-right[
+
+``` r
+p + facet_grid(category ~ .)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-32-1.png" width="650" style="display: block; margin: auto;" /&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review (Part (b))
+
+.pull-left[
+* The remaining plots all use `facet_wrap`
+* By default, the axes all use the same scale, which rules out (ii)
+* By default, the facets are sorted alphabetically, which rules out (iv)
+]
+
+.pull-right[
+
+``` r
+p + facet_wrap(~ category)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-33-1.png" width="650" style="display: block; margin: auto;" /&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review (Part (c))
+
+The only plot with different `\(y\)`-axes per facet is plot (iii).
+
+
+``` r
+p + facet_wrap(~ category, scales = "free_y")
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-34-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+### Exercise Review (Part (d))
+
+`axes = "separate"` is not an actual option in `facet_grid`
+
+
+``` r
+p + facet_wrap(~ category, axes = "separate")
+```
+
+---
+exclude: true
+
+### Exercise Review (Part (e))
+
+Looking at the `\(x\)`-axis values of plot (iv), we can see that the facets are
+sorted from those with the lowest to those with the highest average price.
+
+
+``` r
+p + facet_wrap(~ reorder(category, price))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-36-1.png" width="600" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Describe best practices for making informative and readable compound plots.
+* Use the patchwork package to assemble ggplot2 objects into compound plots.
+
+---
+
+### In-Class Demo
+
+* Before we work through the demo together, discuss your initial attempt on the discussion page.
+* We will work through [Multiple Weather Variables] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+
+---
+
+### In-Class Exercise
+
+* Submit an answer to [Faceting Rules of Thumb] from the exercises sheet. Provide
+a brief explanation for your selection.
+* Everyone should submit a response (**not** one per team for this problem).
+
+---
+
+## Week 4 - 1
+
+1. Visualizations Share
+1. Exercise Review
+1. In-Class Discussion [4-1]
+1. In-Class Demo [4-1]
+1. In-Class Exercise [4-1]
+
+---
+
+## Announcements
+
+* If your group did not already sign up on the visualization shares schedule, then you have been assigned a date.
+* Upcoming Deadlines
+  - HW1
+  - Project Milestone 2
+
+---
+exclude: true
+
+### Exercise Review
+
+_Whenever possible, each panel in a faceted plot should be made to have its own `\(y\)`-axis scale._
+
+False: Readers generally assume the facets have the same axes scales. Free
+scales should only be provided if the resulting figure would not be legible
+otherwise. In this case, the caption should highlight the fact that the scales
+are not the same across facets.
+
+---
+
+### Exercise Review
+
+&lt;img src="figure/facet-box-comparison.png" width="650" style="display: block; margin: auto;" /&gt;
+
+This example is from [https://doi.org/10.1111/cts.12554](https://doi.org/10.1111/cts.12554). 
+Freeing the `\(y\)`-axis scale has a big effect on the conclusions we draw. Even if
+not misleading, the choice should be considered carefully
+
+---
+exclude: true
+
+### Exercise Review
+
+_When using the `patchwork` package, two plots `p1` and `p2` can be placed side-by-side using `p1 / p2`._
+
+False: `/` places panels on top of one another. To place them side by side, we
+can use `+`. 
+
+---
+exclude: true
+
+### Exercise Review
+
+_When using the `patchwork` package, the `plot_layout` function can be used to collect legends._
+
+
+True: This can be done by calling `plot_layout(guides = "collect")`.
+
+---
+exclude: true
+
+### Exercise Review
+
+_Relative to interactively filtered displays, faceted plots are less taxing on the readers memory._
+which(x, arr.ind = FALSE, useNames = TRUE)
+
+True: Faceting requires more space, but it allows comparisons to be made without
+having to recall the previous interactive view. Tamara Munzner calls this
+principle, "Eyes beat memory."
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Draw the reactive graph for a Shiny App.
+* Implement a Shiny app that uses simple (non-graphical) inputs.
+* Explain dynamic queries and discuss their effectiveness in specific problems.
+
+---
+
+### Discussion [4 - 1]
+
+* This discussion is a warm-up to interactive visualization.
+* Respond to the prompt on the Canvas Discussion 4 - 1 link.
+* Discuss and answer the prompts with your project group. Include your project
+group number next to your answer.
+
+---
+
+### In-Class Demo [4 - 1]
+
+We will work through [California Wildfires] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [4 - 1]
+
+Right now, the dotplot responds to the year slider. However,
+
+* The dotplot does not allow any user inputs.
+* There are selections besides year that might be relevant.
+
+Imagine someone came to your statistical consulting hours with this application.  They want your expertise to improve the app so that it conveys more information.  How would you approach this? What would be the reactive graph of your proposed implementation?
+
+---
+
+## Week 4 - 2
+
+1. Visualization Share
+1. In-Class Discussion [4 - 2]
+1. In-Class Demo/Exercise [4 - 2]
+
+---
+
+### Announcements
+
+* Upcoming Deadlines
+  - HW1
+  - Project Milestone 2
+
+---
+
+### Discussion [4 - 2]
+
+* Respond to the prompt on the Canvas Discussion 4 - 2 link. Make sure to explain any code that you prepare.
+* Discuss and answer the prompts with your project group. Include your project group number next to your answer.
+
+---
+
+### In-Class Exercise/Demo [4 - 2]
+
+We will work through [Interactive German Traffic] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+At the places where I pause, write your best guesses for the next step. These
+guesses will be the exercise submission for today.
+
+---
+
+## Week 5 - 1
+
+1. Visualization Share
+1. Shiny App Tips
+1. In-Class Demo [5 - 1]
+1. In-Class Discussion [5 - 1]
+1. In-Class Exercise [5 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  * HW2
+  * Project Milestone 2
+1. Midterm (in-class)
+  - Revieiwng the online course notes.
+  - Sketching solutions to problems from the exercise sheet.
+  - Practice under time pressure.
+
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Efficiently debug Shiny apps.
+* Use brushes to query a scatterplot in a Shiny app.
+
+---
+
+### Shiny Apps in Problem Sets
+
+If you tried compiling a Shiny app within an rmarkdown document, you probably
+saw a message like the one below,
+
+&lt;img src="figure/shiny_rmarkdown.png"/&gt;
+
+You did not make a mistake! Shiny doesn't allow you to host an app within an
+Rmarkdown document, unfortunately.
+
+---
+
+### Shiny Apps in Submissions
+
+To let us grade your Shiny apps within the problem sets, you have two options,
+
+1. Include a screen recording of your app along with the code you used to create
+it. You do not need to share the code as R scripts -- we will just read the code
+as it's embedded in the main write-up.
+
+1. You could try hosting your app on a public site.
+
+---
+
+### Debugging Shiny Apps
+
+In addition to printing to the R console or inserting a `browser()` call, you
+can create UI elements that print variables of interest.
+  * `verbatimOutput` will print arbitrary R objects to the shiny UI
+  * Remind me to give examples during our demo today.
+
+
+``` r
+server &lt;- function(input, output) {
+  output$debug &lt;- verbatimOutput({
+    # intermediate data structure 
+  })
+}
+```
+
+---
+
+### Debugging Shiny Apps
+
+A general principle for debugging: If you are very stuck, it helps to simplify
+the problem. Pare away parts of the code that seem unrelated to the bug until
+you arrive at a minimal example that reproduces the same buggy behavior. In the
+process, you may discover the solution, and even if not, you will have a version
+of the code that others can easily give feedback on.
+
+---
+
+
+### In-Class Discussion [5 - 1]
+
+* Respond to the prompt on the Canvas Discussion 5 - 1 link.
+* Discuss and answer the prompts with your project group. Include your project group number next to your answer.
+
+---
+
+### In-Class Demo [5 - 1]
+
+We will work through [Birds Brushed Scatterplot] part (a) in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [5 - 1]
+
+We will work through the [Code Analysis] exercise again, but for material from
+Shiny. Please submit your own compiled Rmd file with just the code and your
+comments, not all the other text in the notes.
+
+[Code Analysis] Pick one code example from this week’s lecture notes. Provide a
+3 - 4 sentence summary of the overall implementation strategy. Then, add
+comments every 10 - 15 lines describing what each section of code is doing. If
+there are parts that you do not understand, add a ??? next to it (we will review
+these in the next lecture).
+
+---
+
+## Week 5 - 2
+
+1. Visualization Share
+1. Exercise Review
+1. In-Class Demo [5 - 2]
+1. In-Class Discussion [5 - 2]
+1. In-Class Exercise [5 - 2]
+
+---
+
+### Announcements
+
+1. We are done with the first course module (Fundamentals of Data
+Visualization). The remaining modules are focused on specific data types.
+1. Upcoming deadlines
+   - HW2
+   - Project Milestone 2
+1. Midterm (in-class)
+  - Reviewing the online course notes.
+  - Sketching solutions to problems from the exercise sheet.
+  - Practice under time pressure.
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Explain what dynamic queries are and why they might be used in data visualization.
+* Use brushes to query a histogram in a Shiny app.
+
+---
+
+
+### In-Class Discussion [5 - 2]
+
+* Respond to the prompt on the Canvas Discussion 5 - 2 link. Make sure to explain any code that you prepare.
+* Discuss and answer the prompts with your project group. Include your project group number next to your answer.
+
+---
+
+### In-Class Demo [5 - 2]
+
+We will work through [NYC Rentals] part (c) in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [5 - 2]
+
+Respond to [Graphical Queries Discussion] in the exercise sheet:
+
+This problem asks you to share your understanding of the concept of graphical queries in data visualization.
+
+* Provide a one sentence summary of the concept of graphical queries.
+* Describe an example application that uses a graphical query. Give details of the interactivity patterns associated with your example.
+* Why is a graphical query appropriate in your example application? Contrast the graphical query approach with a non-graphical alternative.
+
+
+---
+
+## Week 6 - 1
+
+1. Visualization Shares
+1. In-Class Discussion [6 - 1]
+1. In-Class Demo [6 - 1]
+1. In-Class Exercise [6 - 1]
+
+---
+
+### Announcements
+
+1. Milestone 1 grades and HW1 solutions are posted.
+  - We are happy to discuss milestones during exercise sessions or OH
+1. Upcoming Deadlines
+  - HW2
+  - Project Milestone 2
+1. The Midterm (in-class). A practice exam and solutions are on Canvas. 
+  - Revieiwng the online course notes.
+  - Sketching solutions to problems from the exercise sheet.
+  - Practice under time pressure.
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Construct and visualize a `tsibble` time series object
+* Discuss the presence of trend, seasonal, or cyclic structure in a time series
+
+---
+
+### In-Class Discussion [6 - 1]
+
+1. What datasets have you seen that have time series (or sequential) structure?
+Describe some of the context around the data. What questions were they intended
+to answer?
+
+1. In your own words, what makes analysis of time series data challenging? Have
+you encountered any of these challenges in your past projects?
+
+Discussion link on Canvas.
+
+---
+
+### In-Class Exercise [6 - 1]
+
+* I will pause at a few points during the demo today, and I want you to guess
+what the next step in the analysis is.
+* At the end of the demo, summarize your guesses and submit them to Canvas.
+* You should be able to make your submission before the end of class.
+
+---
+
+### In-Class Demo [6 - 1]
+
+We will work through as much of [Global Carbon Footprint Network] as we can.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+## Week 6 - 2
+
+1. Visualization Shares
+1. In-Class Demo [6 - 2]
+1. In-Class Exercise [6 - 2]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  1. HW2
+  1. Project Milestone 2
+1. Midterm (in-class). A practice exam and solutions are on Canvas. 
+  - Reviewing the online course notes.
+  - Sketching solutions to problems from the exercise sheet.
+  - Practice under time pressure.
+  - Today is the last set of topics that could appear
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Compute and interpret time series features using the `feasts` package
+* Design and critique interactive visualizations based on time series features
+
+---
+
+### In-Class Demo [6 - 2]
+
+We will work through [Global Carbon Footprint II].  Before we do this, work with
+your neighbors to prepare a design and pseudocode for part (b).
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [6 - 2]
+
+* Work through parts (a - b) in the [Spotify Time Series I] problem on the
+exercise sheet.
+* You will get full credit if you make an honest attempt -- if you become stuck
+at some step, describe the difficulty that you encountered.
+
+---
+
+## Week 7 - 1
+
+1. Visualization Shares
+1. Exercise Review
+1. Practice Midterm Review
+1. In-Class Demo [7 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  1. HW2
+  1. Project Milestone 2
+1. Midterm (in-class). A practice exam and solutions are on Canvas. To study, consider:
+  - Reviewing the online course notes.
+  - Sketching solutions to problems from the exercise sheet.
+  - Practice under time pressure.
+  - Covers material up to Week 6 - 4 notes
+
+---
+exclude: true
+
+### Exercise Review
+
+We will look at the most streamed song of 2017, which was "Shape of You." The
+dataset
+[here](https://uwmadison.box.com/shared/static/hvplyr3jy6vbt7s80lqgfx81ai4hdl0q.csv)
+contains the number of streams for this song across regions, for each day in
+which it was in the Spotify 100 most streamed songs for that region. Create a
+`tsibble` object from this dataset, keying by `region` and indexing by `date`.
+
+
+``` r
+song &lt;- read_csv("https://uwmadison.box.com/shared/static/hvplyr3jy6vbt7s80lqgfx81ai4hdl0q.csv")
+head(song)
+```
+
+```
+## # A tibble: 6 × 5
+##   artist     track_name   region date       streams
+##   &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;  &lt;date&gt;       &lt;dbl&gt;
+## 1 Ed Sheeran Shape of You ar     2017-01-06   57617
+## 2 Ed Sheeran Shape of You ar     2017-01-07   51212
+## 3 Ed Sheeran Shape of You ar     2017-01-08   47299
+## 4 Ed Sheeran Shape of You ar     2017-01-09   58157
+## 5 Ed Sheeran Shape of You ar     2017-01-10   56384
+## 6 Ed Sheeran Shape of You ar     2017-01-11   59494
+```
+
+---
+exclude: true
+
+### Exercise Review
+
+
+``` r
+library(tsibble)
+song_ts &lt;- as_tsibble(song, key = region, index = date, regular = FALSE)
+song_ts
+```
+
+```
+## # A tsibble: 19,907 x 5 [!]
+## # Key:       region [54]
+##    artist     track_name   region date       streams
+##    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;  &lt;date&gt;       &lt;dbl&gt;
+##  1 Ed Sheeran Shape of You ar     2017-01-06   57617
+##  2 Ed Sheeran Shape of You ar     2017-01-07   51212
+##  3 Ed Sheeran Shape of You ar     2017-01-08   47299
+##  4 Ed Sheeran Shape of You ar     2017-01-09   58157
+##  5 Ed Sheeran Shape of You ar     2017-01-10   56384
+##  6 Ed Sheeran Shape of You ar     2017-01-11   59494
+##  7 Ed Sheeran Shape of You ar     2017-01-12   59565
+##  8 Ed Sheeran Shape of You ar     2017-01-13   64899
+##  9 Ed Sheeran Shape of You ar     2017-01-14   71555
+## 10 Ed Sheeran Shape of You ar     2017-01-15   62253
+## # ℹ 19,897 more rows
+```
+
+---
+exclude: true
+
+### Exercise Review
+
+Filter to `region == "global"`, and make a `gg_season` plot by month. Comment
+on the what you see.
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-41-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+### Exercise Review
+
+Filter to `region == "global"`, and make a `gg_season` plot by month. Comment
+on the what you see.
+
+
+``` r
+library(feasts)
+song_ts |&gt;
+  filter(region == "global") |&gt;
+  gg_season(period = "month") +
+  theme(legend.key.width = unit(1.5, "cm"))
+```
+
+---
+exclude: true
+
+### Exercise Review
+
+Provide a scatterplot showing the relationship between the number of streams
+of this song in the US and in Canada. Do the same between the US and Japan.
+Briefly comment.
+    
+
+``` r
+songs_wide &lt;- song_ts |&gt;
+    filter(region %in% c("jp", "ca")) |&gt;
+    pivot_wider(names_from = region, values_from = streams)
+
+head(songs_wide)
+```
+
+```
+## # A tsibble: 6 x 5 [!]
+##   artist     track_name   date           ca    jp
+##   &lt;chr&gt;      &lt;chr&gt;        &lt;date&gt;      &lt;dbl&gt; &lt;dbl&gt;
+## 1 Ed Sheeran Shape of You 2017-01-06 203788  4639
+## 2 Ed Sheeran Shape of You 2017-01-07 240198  7313
+## 3 Ed Sheeran Shape of You 2017-01-08 235167  8851
+## 4 Ed Sheeran Shape of You 2017-01-09 259084  9827
+## 5 Ed Sheeran Shape of You 2017-01-10 258755 10352
+## 6 Ed Sheeran Shape of You 2017-01-11 258482 10189
+```
+
+---
+
+exclude: true
+
+### Exercise Review
+
+Provide a scatterplot showing the relationship between the number of streams
+of this song in the US and in Canada. Do the same between the US and Japan.
+Briefly comment.
+    
+
+``` r
+ggplot(songs_wide) +
+    geom_point(aes(ca, jp, col = date)) +
+    theme(legend.key.width = unit(1.5, "cm"))
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-44-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+exclude: true
+
+### Exercise Review
+
+The dataset
+[here](https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv)
+contains similar data. Read these
+data into a tsibble, keyed by `artist:track_name` and extract features of the
+`streams` time series using the `features` function in the feasts library.
+
+
+``` r
+spotify &lt;- read_csv("https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv") |&gt;
+    as_tsibble(key = artist:track_name, index = date)
+spotify
+```
+
+```
+## # A tsibble: 32,986 x 5 [1D]
+## # Key:       artist, track_name [121]
+##    artist                 track_name                   region date       streams
+##    &lt;chr&gt;                  &lt;chr&gt;                        &lt;chr&gt;  &lt;date&gt;       &lt;dbl&gt;
+##  1 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-11  463263
+##  2 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-12  477565
+##  3 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-13  498475
+##  4 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-14  527291
+##  5 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-15  503230
+##  6 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-16  462189
+##  7 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-17  514715
+##  8 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-18  566673
+##  9 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-19  600067
+## 10 A Boogie Wit da Hoodie Drowning (feat. Kodak Black) global 2017-04-20  632337
+## # ℹ 32,976 more rows
+```
+
+---
+
+exclude: true
+
+### Exercise Review
+
+The dataset
+[here](https://uwmadison.box.com/shared/static/xj4vupjbicw6c8tbhuynw0pll6yh1w0d.csv)
+contains similar data. Read these
+data into a tsibble, keyed by `artist:track_name` and extract features of the
+`streams` time series using the `features` function in the feasts library.
+
+
+``` r
+spotify_features &lt;- spotify |&gt;
+    features(streams, feature_set(tag = "trend"))
+spotify_features
+```
+
+```
+## # A tibble: 121 × 11
+##    artist   track_name trend_strength seasonal_strength_week seasonal_peak_week seasonal_trough_week
+##    &lt;chr&gt;    &lt;chr&gt;               &lt;dbl&gt;                  &lt;dbl&gt;              &lt;dbl&gt;                &lt;dbl&gt;
+##  1 "A Boog… "Drowning…          0.973                  0.765                  1                    3
+##  2 "AJR"    "Weak"              0.996                  0.702                  4                    6
+##  3 "Alan W… "Faded"             0.985                  0.777                  6                    1
+##  4 "Alessi… "How Far …          0.998                  0.682                  4                    1
+##  5 "Alok"   "Hear Me …          0.996                  0.803                  5                    1
+##  6 "Anuel … "Sola (Re…          0.974                  0.832                  5                    3
+##  7 "Ariana… "Side To …          0.998                  0.834                  6                    1
+##  8 "Axwell… "More Tha…          0.988                  0.741                  3                    5
+##  9 "Big Se… "Bounce B…          0.991                  0.593                  6                    1
+## 10 "Bruno … "24K Magi…          0.998                  0.800                  6                    1
+## # ℹ 111 more rows
+## # ℹ 5 more variables: spikiness &lt;dbl&gt;, linearity &lt;dbl&gt;, curvature &lt;dbl&gt;, stl_e_acf1 &lt;dbl&gt;,
+## #   stl_e_acf10 &lt;dbl&gt;
+```
+
+---
+
+exclude: true
+
+### Exercise Review
+
+Which tracks had the highest and lowest `trend_strength`? Visualize their
+streams over the course of the year.
+
+
+``` r
+spotify_features |&gt;
+    select(artist, track_name, trend_strength) |&gt;
+    arrange(-trend_strength)
+```
+
+```
+## # A tibble: 121 × 3
+##    artist       track_name                                                            trend_strength
+##    &lt;chr&gt;        &lt;chr&gt;                                                                          &lt;dbl&gt;
+##  1 The Weeknd   "Starboy"                                                                      0.999
+##  2 ZAYN         "I Don’t Wanna Live Forever (Fifty Shades Darker) - From \"Fifty Sha…          0.998
+##  3 DJ Snake     "Let Me Love You"                                                              0.998
+##  4 Zedd         "Stay (with Alessia Cara)"                                                     0.998
+##  5 Major Lazer  "Cold Water (feat. Justin Bieber &amp; MØ)"                                        0.998
+##  6 Bruno Mars   "That's What I Like"                                                           0.998
+##  7 The Weeknd   "I Feel It Coming"                                                             0.998
+##  8 Clean Bandit "Rockabye (feat. Sean Paul &amp; Anne-Marie)"                                      0.998
+##  9 Future       "Mask Off"                                                                     0.998
+## 10 James Arthur "Say You Won't Let Go"                                                         0.998
+## # ℹ 111 more rows
+```
+
+---
+
+exclude: true
+
+### Exercise Review
+
+Which tracks had the highest and lowest `trend_strength`? Visualize their
+streams over the course of the year.
+
+
+``` r
+spotify_features |&gt;
+    select(artist, track_name, trend_strength) |&gt;
+    arrange(trend_strength)
+```
+
+```
+## # A tibble: 121 × 3
+##    artist          track_name                         trend_strength
+##    &lt;chr&gt;           &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Eminem          Lose Yourself - Soundtrack Version          0.853
+##  2 Luis Fonsi      Despacito (Featuring Daddy Yankee)          0.883
+##  3 Thomas Rhett    Unforgettable                               0.899
+##  4 Nicky Jam       Si Tú La Ves                                0.909
+##  5 Ed Sheeran      Thinking Out Loud                           0.913
+##  6 Ed Sheeran      Photograph                                  0.953
+##  7 Sia             Cheap Thrills                               0.956
+##  8 Sebastian Yatra Traicionera                                 0.959
+##  9 Piso 21         Me Llamas (feat. Maluma) - Remix            0.965
+## 10 Justin Bieber   Sorry                                       0.970
+## # ℹ 111 more rows
+```
+
+---
+
+exclude: true
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Read in and describe geospatial properties of a dataset in vector format
+* Create a map from (and visually encode data contained within) a spatial data
+frame.
+
+---
+exclude: true
+
+### In-Class Discussion [7 - 1]
+
+Prompt: In your own words, explain the key characteristics of vector datasets.
+Why can't vector data simply be stored as `csv` files?
+
+Discussion link on Canvas.
+
+---
+
+### Practice Midterm Review
+
+* With your team, respond to the prompts: https://go.wisc.edu/8m3vp0
+  - Link also on Canvas
+
+---
+
+### In-Class Demo [7 - 1]
+
+We will work through parts (a - c) of [Glacial Lakes].
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+If we have time, we'll also show how to create a direct link to these data.
+
+---
+
+exclude: true
+
+### In-Class Exercise [7 - 1]
+
+Please submit a response to [tmap Exploration] parts (a - b) in the exercise
+sheet. Make your submission with your project team.
+
+[tmap Exploration] There are many example maps on the tmap package’s homepage –
+see the vignettes, tutorials, or presentations, for example. In this problem,
+you will recreate and deconstruct one example visualization from this webpage.
+
+a. Pick one figure from the page linked above. Describe the data used to
+generate this figure. Is the data in a vector or raster format?
+
+b. Regenerate the figure and write comments in the code that describe the
+purpose for each layer (or related groups of layers).
+
+---
+
+exclude: true
+
+## Week 7 - 2
+
+1. In-Class Discussion [7 - 2]
+1. In-Class Demo [7 - 2]
+1. In-Class Exercise [7 - 2]
+
+---
+
+exclude: true
+
+### Announcements
+
+1. Upcoming Deadlines
+  1. HW2
+  1. Project Milestone 2
+1. Midterm
+  1. Reviewing the online course notes.
+  1. Sketching solutions to problems from the exercise sheet.
+  1. Practice under time pressure.
+
+---
+
+exclude: true
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Integrate leaflet into your Shiny Apps.
+* Use leaflet interactions to guide reactive operations.
+
+---
+
+## Week 8 - 1
+
+1. In-Class Discussion [8 - 1]
+1. In-Class Demo [8 - 1]
+1. In-Class Exercise [8 - 1]
+
+---
+
+### Announcements
+
+1. Deadlines
+  1. Project Milestone 2
+  1. Project and Portfolio Peer Reviews
+  1. HW3
+1. Kris OH Rescheduled: 3:30 - 5:30pm this Friday 10/25
+
+---
+
+### Midterm Recap
+
+* Refer to the syllabus for our percent/percentile-based grading scheme
+* We were generally more forgiving with code-related issues relative to problems in definitions/discussion.
+
+.center[
+&lt;img src="figure/midterm.svg" width=650/&gt;
+]
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Read in a network or tree dataset using the `tidygraph` package
+* Create a node-link network or tree visualization with visual encodings for
+node properties
+
+---
+
+### In-Class Discussion [8 - 1]
+
+Here are four thoughtfully designed network and tree visualizations data that attracted a bit of attention in the data science blogosphere. 
+
+1. https://truth-and-beauty.net/projects/peakspotting
+1. https://taiwandatastories.com/bubble-tea-guide/
+1. http://tudornetworks.net/
+1. https://hipiler.higlass.io/
+
+With your team, discuss these questions:
+
+* What important design choices did the authors make?
+* Which choices do you think were more effective? less effective? why?
+
+---
+
+### In-Class Demo [8 - 1]
+
+We will work through [COVID-19 Phylogeny] in the exercises sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [8 - 1]
+
+In groups of 2 - 3, work through [Pair Code Review] in the exercise sheet.
+Please submit your an individual summary of your discussion.
+
+You are especially encouraged to review any progress towards Project Milestone
+2.
+
+---
+
+## Week 8 - 2
+
+1. Visualization Shares
+1. In-Class Discussion [8 - 2]
+1. In-Class Demo [8 - 2]
+
+---
+
+### Announcements
+
+1. Deadlines
+  1. Project Milestone 2
+  1. Project and Portfolio Peer Reviews
+  1. HW3
+1. Kris OH Rescheduled: 3:30 - 5:30pm this Friday 10/25, MSC 1274
+
+---
+
+### Today
+
+By the end of class today, you should be able to,
+
+* Comment on the readability and priorities of alternative graph layouts and visual encodings.
+* Modify the layout of graph visualizations made using the `ggraph` package.
+
+---
+
+### Warm-Up
+
+[Network Vis T/F] Select all the true statements about network visualization.
+
+* For large, dense networks, node-link diagrams are preferable to adjacency matrix visualizations.
+* For tasks related to local topology, node-link diagrams are preferable to adjacency matrix visualizations.
+* It is possible to visually encode edge weight in either node-link or adjacency matrix visualizations.
+* It is possible to visually encode node category in either node-link or adjacency matrix visualizations.
+
+---
+
+### In-Class Demo [8 - 2]
+
+We will work through [Movie Genres] (and, if time, [UK Energy Flow]) in the
+exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+## Week 9 - 1
+
+1. Visualization Shares
+1. In-Class Discussion [9 - 1]
+1. In-Class Demo [9 - 1]
+
+---
+
+### Announcements
+
+1. Deadlines
+  1. Project Milestone 2
+  1. Project and Portfolio Peer Reviews
+  1. HW3
+
+---
+
+### Visualization Design/Critique
+
+How to decide what type of visualization you should make by looking at the data.
+
+* Determine the data types/interpretation for each column separately
+* Make a list of potentially interesting questions
+* For each question,
+  - What are the relevant variables?
+  - How do they need to be compared?
+  - Which should be prioritized?
+* Determine visual encodings using data type + prioritization
+* Recognize parallel structure (for small multiples)
+
+---
+
+### Visualization Design/Critique
+
+Determine visual encodings using data type + prioritization
+
+For example, if we had a categorical + continuous variable, we could consider:
+
+* `geom_boxplot`: `\(x\)`-axis `\(\to\)` category, `\(y\)`-axis `\(\to\)` continuous value
+* `geom_histogram`: 
+  - `\(x\)`-axis `\(\to\)` continuous value, color `\(\to\)` category
+  - `\(x\)`-axis `\(\to\)` continuous value, facet `\(\to\)` category
+* `geom_point` or `geom_jitter`: `\(x\)`-axis `\(\to\)` category (with jitter), `\(y\)`-axis `\(\to\)` continuous value
+
+---
+
+### Visualization Design/Critique
+
+&lt;img src="figure/channels.png" width=750/&gt;
+
+---
+
+### Visualization Design/Critique
+
+When critiquing, ask: 
+  * Which comparisons are automatic/perceptual? 
+  * Which laborious/require calculation?
+
+&lt;img src="figure/popout.png"/&gt;
+
+---
+
+### In-Class Discussion [9 - 1]
+
+[Clustering Interpretation] Imagine that you are sharing the results of a
+K-means analysis with a collaborator who is comfortable with scientific
+reasoning, but who is not trained in statistics.
+
+* What are the main outputs from K-means clustering? In your own words, how do you interpret them?
+* Give one example of a situation/type of question where K-means clustering would be useful, and give one example where it would not. Explain your reasoning.
+
+---
+
+### In-Class Demo [9 - 1]
+
+We will work through [Women, Business, and the Law] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+## Week 9 - 2
+
+1. Visualization Shares
+1. In-Class Discussion [9 - 2]
+1. In-Class Demo/Exercise [9 - 2]
+
+---
+
+### Announcements
+
+1. Deadlines
+  1. Project Milestone 2
+  1. Project and Portfolio Peer Reviews
+  1. HW3
+1. There will be no exercise 10 - 1
+
+---
+
+### In-Class Discussion [9 - 2]
+
+Select all the true statements below and explain your reasoning.
+
+.pull-left[
+&lt;div style="font-size: 25px;"&gt;
+&lt;ul&gt;
+&lt;li&gt;Samples C and D are more similar to one another than A and B.&lt;/li&gt;
+&lt;li&gt;A and B are more similar to each other than B and C.&lt;/li&gt;
+&lt;li&gt;If this subtree were cut to form K = 2 clusters, then A and B would belong to the same cluster.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+]
+
+.pull-right[
+&lt;img src="figure/hclust_tree.png" width=370/&gt;
+]
+
+---
+
+### In-Class Demo [9 - 2]
+
+We will work through [Taxi Trips] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+## Week 10 - 1
+
+1. Visualization Shares
+1. In-Class Discussion [10 - 1]
+1. In-Class Demo [10 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  * HW3
+  * Project and Portfolio Peer Reviews
+1. Confusion in Milestone 2 settings. If one team member submitted, all will get credit.
+1. CDIS, Women in Tech Panel
+  * 11/6 4:30pm 
+  * [https://go.wisc.edu/j41q3d](https://go.wisc.edu/j41q3d)
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+   * Use PCA to "map" the rows of a high-dimensional, numerical dataset
+   * Design and interpret a visualization of PCA component directions
+
+---
+
+### PCA Example
+
+This example is from "Genes Mirror Geography" by Novembre et al. (2008).
+
+&lt;img src="figure/genes-geography-1.png" width="500" style="display: block; margin: auto;" /&gt;
+
+---
+
+### PCA Example
+
+This example is from "Genes Mirror Geography" by Novembre et al. (2008).
+
+&lt;img src="figure/genes-geography-2.png" width="500" style="display: block; margin: auto;" /&gt;
+
+---
+
+### In-Class Discussion [10 - 1]
+
+With your group, work through [PCA Interpretation].
+
+---
+
+### In-Class Demo
+
+We will work through [Food Nutrients] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+exclude: true
+
+### Pause Points
+
+Pause: How to make recipe, how to relate the barplot to the scatterplot, how to interpret PC4 vs. PC5?
+
+---
+
+
+## Week 10 - 2
+
+1. Visualization Shares
+1. In-Class Discussion [10 - 2]
+1. In-Class Demo [10 - 2]
+1. In-Class Exercise [10 - 2]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  * Project and Portfolio Peer Reviews
+  * HW3
+1. Milestone 3 presentation order updated
+1. Event - Intro to Shiny Apps in Python
+  * Wed. 11/13, 1 - 3pm
+  * https://go.wisc.edu/gd2su9
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+   * Use UMAP to "map" the rows of a high-dimensional, numerical dataset
+   * Interpret a UMAP display
+
+---
+
+### Nonlinear Dimensionality Reduction Example
+
+This example is from "A Topography of Climate Change Research" by Callaghan et
+al. (2020). They also used an initial topic modeling step.
+
+&lt;img src="figure/climate-tomography-1.png" width="400" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Nonlinear Dimensionality Reduction Example
+
+Each panel corresponds to the fastest growing topics within different IPCC
+working groups.
+
+&lt;img src="figure/climate-tomography-2.png" width="1000" style="display: block; margin: auto;" /&gt;
+
+---
+
+### In-Class Discussion [10 - 2]
+
+With your group, work through [How to Misread UMAP].
+
+---
+
+### In-Class Demo [10 - 2]
+
+We will work through [Single-Cell Genomics] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+exclude: true
+
+### Pause Points
+
+Pause: How to make recipe, how to color points, guessing the impact of increasing neighborhood size, how would you make an interactive version of this?
+
+---
+
+### In-Class Exercise [10 - 2]
+
+With your group, submit an answer to [Job Interview] from the exercises sheet.
+
+&gt; Imagine that you are interviewing job candidates for a data science position that involves visualization with PCA or UMAP. Prepare an interview question that test candidates’ knowledge of / experience with these topics. Also prepare examples of strong responses. An good question will either (i) ask the interviewee to describe a specific time in the past where they used the concept or (ii) present the interviewee with a type of challenge related to what is commonly encountered and see how they would address it
+
+---
+
+## Week 11 - 1
+
+1. Visualization Shares
+1. In-Class Discussion [11 - 1]
+1. In-Class Demo [11 - 1]
+1. In-Class Exercise [11 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  * Project and Portfolio Peer Reviews
+  * HW3
+  * Project Milestone 3
+1. Event - Intro to Shiny Apps in Python
+  * Wed. 11/13, 1 - 3pm
+  * https://go.wisc.edu/gd2su9
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Explain the assumptions, input, and output for a Latent Dirichlet Allocation (LDA) model
+* Prepare a document term matrix for modeling with LDA
+* Prepare a barplot visualization of LDA outputs
+
+---
+
+### LDA Example
+
+This example is from "Matching Methods for High-Dimensional Data with
+Applications to Text" by Roberts et al. (2016).
+
+&lt;img src="figure/lda_example_1.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+### LDA Example
+
+This example is from "Matching Methods for High-Dimensional Data with
+Applications to Text" by Roberts et al. (2016).
+
+&lt;img src="figure/lda_example_2.png" width="500" style="display: block; margin: auto;" /&gt;
+
+---
+
+### In-Class Discussion [11 - 1]
+
+With your group, respond to [Interpreting Topic Models].
+
+&gt; Imagine that you are a statistical consultant working with a scientist / sports team / journalist / sales division head (pick your favorite or make up your own example). At one point in your study, you found it useful to apply LDA for visualizing a document collection. In this problem, you are asked to provide a non-technical explanation of how to interpret the topic model output, assuming that your audience is familiar with their data but not statistical methodology.
+
+---
+
+### In-Class Demo [11 - 1]
+
+We will work through [Topics in Pride and Prejudice] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [11 - 1]
+
+Respond to [Code Analysis] from the exercise sheet. You can choose any material
+from weeks 10 - 11.
+
+&gt; Provide a 3 - 4 sentence summary of the overall implementation strategy. Then, add comments every 10 - 15 lines describing what each section of code is doing.  If there are parts that you do not understand, add a ??? next to it (we will review these in the next lecture).
+
+---
+
+## Week 11 - 2
+
+1. Visualization Shares
+1. In-Class Discussion [11 - 2]
+1. In-Class Demo [11 - 2]
+
+---
+
+### Announcements
+
+1. Due Dates 
+  - HW3
+  - HW4
+  - Project Milestone 3
+
+---
+
+
+### Clustering Examples
+
+From "Color Naming Models for Color Selection, Image Editing and Palette Design"
+by Heer and Stone (2012).
+
+&lt;img src="figure/color-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Clustering Examples
+
+From "Color Naming Models for Color Selection, Image Editing and Palette Design"
+by Heer and Stone (2012).
+
+&lt;img src="figure/color-2.png" width="900" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Clustering Examples
+
+From "Color Naming Models for Color Selection, Image Editing and Palette Design"
+by Heer and Stone (2012).
+
+&lt;img src="figure/color-3.png" width="1000" style="display: block; margin: auto;" /&gt;
+
+---
+
+exclude: true
+
+### Exercise Review
+
+In R's formula syntax, `.` is shorthand for "all variables." This is saying to
+build a recipe using all variables as predictors, with none as the response.
+
+
+``` r
+umap_rec &lt;- recipe(~., data = pbmc) |&gt; # Why  ~. ?  why we want to swap x and y value?
+```
+
+---
+exclude: true
+
+### Exercise Review
+
+`value` refers to the Principal Component value for that dimension.
+
+* Formally: This column stores the vectors that define the PC subspace.
+* Informally: As we increase along that PC's direction, value describes how that coordinate is expected to change.
+
+.center[
+&lt;img src="figure/tidy_value.png" width=400/&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review
+
+In this example, we can argue that,
+
+`\begin{align}
+\text{Gauguin } \sim 1.38 \text{PC}_{1} - 1.15 \text{PC}_{2} + 1.34 \text{PC}_{3} + \dots
+\end{align}`
+
+.center[
+  &lt;img src="figure/pca_scores.png" width=600/&gt;
+]
+
+---
+exclude: true
+
+### Exercise Review
+
+In this example, we can argue that,
+
+`\begin{align}
+\text{Gauguin } \sim 1.38 \text{PC}_{1} - 1.15 \text{PC}_{2} + 1.34 \text{PC}_{3} + \dots
+\end{align}`
+
+For example, if we use the first 5 PC dimensions, then the Light Rum coordinate
+of the Gauguin should be roughly,
+
+`\begin{align}
+\text{Gauguin}_{\text{Light Rum}} &amp;= 1.38 \times 0.163 - 1.15 \times \left(-0.112\right) + 1.34 \times 0.152 \\
+&amp;\approx 1.22
+\end{align}`
+
+The actual value is 2.
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Implement and interpret a Structure plot for LDA memberships
+* Explain how LDA can be used as an intermediate step for prediction modeling
+
+---
+
+### In-Class Discussion [11 - 2]
+
+To prepare for today's in-class demo, respond to the discussion prompts with your group: https://go.wisc.edu/z4ppjs
+
+---
+
+### In-Class Demo [11 - 2]
+
+We will work through [Hotel Reviews] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+exclude: true
+
+### In-Class Exercise [11 - 2]
+
+With your project group, work through [Shniederman's Golden Rules] in the exercise sheet.
+
+1. Strive for consistency.
+2. Seek universal usability.
+3. Offer informative feedback.
+
+---
+
+## Week 12 - 1
+
+1. In-Class Discussion [12 - 1]
+1. In-Class Demo [12 - 1]
+1. In-Class Exercise [12 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Give the general definition of a partial dependence profile (PDP).
+* Implement and interpret specific PDP instances using the DALEX package.
+
+---
+
+### Partial Dependence Example
+
+Figure 2 from ["Sustained increases in atmospheric oxygen and marine productivity in the Neoproterozoic and Palaeozoic eras."](https://www.nature.com/articles/s41561-024-01479-1). They used PDP to understand how a random forest model predicts properties of sediment samples, like amounts of Uranium (U) or Total Organic Carbon (TOC).
+
+.center[
+&lt;img src="figure/partial_dependence_biogeochemical.png" width=550/&gt;
+]
+
+---
+
+### In-Class Discussion [12 - 1]
+
+With your group, respond to [Model Visualization Purpose].
+
+* Imagine one real-world scenario where interpreting a model might be important. Explain your reasoning.
+* You have just formed a team to compete in a sequel to the famous Netflix Prize. The task is to predict how a user in the dataset would rate a movie that they haven’t seen before. As a starting point, you can implement one of the following three models: linear model, random forest, or deep learning. Which would you choose, and how would you interpret it? Justify your choice.
+
+
+---
+
+### In-Class Demo [12 - 1]
+
+We will work through [Gender Pay Gap] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [12 - 1]
+
+With your team, respond to [Milestone Reflection] from the exercise sheet.
+
+a. How do you plan on organizing your team’s writing and coding efforts? How can you ensure that relevant resources and preliminary progress can be easily reviewed?
+
+b. What do you anticipate will be the most significant challenge your team faces in preparing the project milestone? Which aspects of this challenge are within your team’s control? How do you plan on overcoming (or sidestepping) this challenge?
+
+c. Do you have any questions for the teaching staff related to the upcoming project milestone?
+
+---
+
+## Week 12 - 2
+
+1. Visualization shares
+1. In-Class Discussion [12 - 2]
+1. In-Class Demo [12 - 2]
+1. In-Class Exercise [12 - 2]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Explain the difference between posterior and posterior predictive distributions.
+* Visualize and interpret specific posterior and posterior predictive distributions.
+* Create an animation using the gganimate package.
+
+---
+
+### Posterior Predictive Example
+
+Figure 2 from ["Phylodynamic assessment of intervention strategies for the West African Ebola virus outbreak"](https://www.nature.com/articles/s41467-018-03763-2/figures/2). They use posterior predictive samples to show that their model learned how geographic borders influence disease spread.
+
+.center[
+&lt;img src="figure/posterior_predictive_borders.png" width=720/&gt;
+]
+
+---
+
+### In-Class Discussion [12 - 2]
+
+With your group, respond to [3 - 2 - 1] in the exercise sheet.
+
+* What are three specific pieces of information you learned in the readings? These can be related to either design or implementation.
+* What are two points from our readings that you found interesting?
+* What is one point that still seems confusing or opaque?
+
+Hint: This will be useful for the in-class exercise.
+
+---
+
+### In-Class Demo [12 - 2]
+
+We will work through [Evolutionary Ecology] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### In-Class Exercise [12 - 2]
+
+With your team, respond to [Concept Map] in the exercise sheet.
+
+Prepare a concept map to summarize the last week of reading material. An
+effective submission will include a thorough coverage of both abstract concepts
+and practical examples, summarized concisely into short phrases. It will also
+include well-justified links between nodes, with text explanations for edges
+whose interpretation might not be obvious at first.
+
+---
+
+## Week 13 - 1
+
+1. Review Exercise [12 - 2]
+1. In-Class Discussion [13 - 1]
+1. In-Class Demo [13 - 1]
+1. In-Class Exercise [13 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+1. Lightning Talks
+  - Exercises will require you to attend and prepare questions for other teams
+
+---
+
+### Today
+
+By the end of the class, you should be able to...
+
+* Explain what it means for a deep learning model to learn intermediate representations.
+* Visualize the activation patterns of individual neurons in deep network.
+
+---
+
+### Deep Learning Example
+
+https://distill.pub/2016/handwriting/
+
+.center[
+&lt;img src="figure/distill_handwriting.png" width=700/&gt;
+]
+
+---
+
+### Review: Topic Model Output
+
+&gt; Opaque point: refresher on how to interpret structure plots 
+
+&gt; One point that is confusing is what the plot is being sorting on? (similar color group) Why we need sorting? Can we use machine learning method to determine which keywords are positive or negative based on the results returned from topic model?
+
+---
+
+Here is a structure plot for five randomly chosen samples from our in-class demo
+about hotel reviews.
+
+&lt;img src="figure/mini_memberships.png"/&gt;
+
+E.g., document 9 is a 5 star review that is almost entirely topic 8.
+
+---
+
+This is the analogous plot with 100 reviews. Without sorting, this gets quite messy.
+
+&lt;img src="figure/mini_memberships-100.png"/&gt;
+
+Notice I also removed the document IDs from the x-axis (they were too small to read).
+
+---
+
+Sorting helps us recognize groups of documents with similar membership patterns.
+
+&lt;img src="figure/mini_memberships-100-sorted.png"/&gt;
+
+---
+
+The sorting is based on leaf order in a clustering tree. 
+
+.center[
+&lt;img src="figure/mini_memberships_tree.png"/&gt;
+]
+
+---
+
+This is the structure plot with all 1000 reviews, now sorted by a tree with 1000
+leaves.
+
+&lt;img src="figure/mini_memberships-all-sorted.png"/&gt;
+
+---
+
+&gt; Can we use machine learning method to determine which keywords are positive or negative based on the results returned from topic model?
+
+Indirectly, yes. You can train a model to predict ratings from topic
+memberships. You can interpret that model to see which topics are associated
+with positive or negative reviews.
+
+---
+
+### Review: Preprocessing
+
+&gt; One point that is still opaque is the preprocessing steps required in order to fit and interpret the model.
+
+* This is context specific! There are no universal preprocessing strategies.
+* The best advice I know is to think carefully about the difference between reality and measurement. Preprocessing should help minimize measurement-related artifacts.
+
+---
+
+### Review: Topic Model Specification
+
+&gt; One point opaque I’m still unsure about on the topic models is how do we know if we have the “correct” or the “best” number of topics for a dataset.
+
+The `perplexity` function computes the likelihood of previously unobserved
+documents. It can be used like a test error.
+
+
+``` r
+library(topicmodels)
+?perplexity
+```
+
+---
+
+### Review: Topic Model Specification
+
+I have also written a paper about this:
+
+&lt;div style="font-size: 20px"&gt;
+Julia Fukuyama, Kris Sankaran, Laura Symul, Multiscale analysis of count data
+through topic alignment, Biostatistics, Volume 24, Issue 4, October 2023, Pages
+1045–1065, https://doi.org/10.1093/biostatistics/kxac018
+&lt;/div&gt;
+
+.center[
+&lt;img src="figure/alto.png" width=600/&gt;
+]
+
+---
+
+### In-Class Discussion [13 - 1]
+
+With your group, respond to [Tensorflow Playground]: https://go.wisc.edu/e3xm20
+
+---
+
+### In-Class Demo [13 - 1]
+
+We will work through [Deep Learning as a Mixture of Separating Hyperplanes] in the exercise sheet.
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+
+---
+
+### In-Class Exercise [13 - 1]
+
+Respond to [Model Visualization Use Cases] in the exercise sheet. Discuss with
+your team, but make submissions individually.
+
+&lt;div style="font-size: 18px"&gt;
+How might you approach model visualization in these problems?
+&lt;ol&gt;
+  &lt;li&gt; Your colleagues have trained a random forest model to predict whether activity observed on a
+  corporate network might be the early signs of a cyberattack. The model is based on features like
+  the average network data rate, the average packet size, and the port numbers of source traffic.
+  Describe visualizations that could help your colleagues understand and improve their trained
+  model.&lt;/li&gt;
+&lt;br/&gt;
+  &lt;li&gt;You working with a client to analyze data from a crisis text helpline. They are interested in the
+  topics that often arise during these support sessions. They are also curious whether some topics
+  are are more easily resolved than others, as measured by a follow-up survey. Propose an analysis
+  strategy and the types of visualizations you expect to be helpful.&lt;/li&gt;
+&lt;br/&gt;
+  &lt;li&gt;You have built a deep learning model to detect changes in satellite imagery (e.g., before and after
+  a natural disaster). Describe visualization techniques that can help you understand the latent
+  image characteristics that may be learned by your model.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+
+---
+
+
+## Week 13 - 2
+
+1. Visualization Shares
+1. In-Class Discussion [13 - 2]
+1. In-Class Demo [13 - 2]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+1. Lightning Talks
+  - Exercises will require you to attend and prepare questions for other teams
+
+
+---
+
+## Week 14 - 1
+
+1. In-Class Discussion [14 - 1]
+1. In-Class Demo [13 - 2]
+1. Reflection Activity [14 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+1. Lightning Talks
+  - Exercises will require you to attend and prepare questions for other teams
+
+---
+
+### In-Class Discussion [14 - 1]
+
+As a class, we will study some of the Q&amp;A tips in the article [“Any questions?”](https://www.embopress.org/doi/epdf/10.1038/embor.2011.20)
+by Jennifer Streeter and Francis J. Miller. Their categorization of questions is
+helpful for either when we are in the audience (it gives example prompts) or
+when we are presenting (it helps us prepare). With your group, 
+
+* Prepare a definition and for the question types that your group is assigned.  
+* Brainstorm an example of a question of that type that your group might be asked during its lightning talk.
+
+Odd Groups: Suggestion, I don’t understand, What do you think?
+
+Even Groups: We have found, Probing, What do you think?
+
+---
+
+
+### In-Class Demo [13 - 2]
+
+We will work through [Histopathology Embeddings].
+
+Live Demos: https://go.wisc.edu/r7ni5s
+
+---
+
+### Reflection Activity [14 - 1]
+
+Discuss one of the three prompts:
+  * Advice for future students
+  * What and now what?
+  * Time Capsule
+
+---
+
+## Week 14 - 2
+
+1. Review and Recommendations
+1. Lightning Talks
+  - Q&amp;A Doc: https://go.wisc.edu/9568ee
+  - In-Class Exercise [14 - 1]
+
+---
+
+### Announcements
+
+1. Upcoming Deadlines
+  - HW4 -- Rubric Updated!
+  - Project Milestone 3. Check milestone for presentation order.
+1. Showcase of course projects
+  - We will create a website to showcase projects or any of your portfolio submissions.
+  - If you want to be included, respond here: https://go.wisc.edu/cee17k
+
+---
+
+### Post-Course Logistics
+
+* The course canvas, notes, and recordings will remain online indefinitely.
+* In-class demos will be taken down from the course repository
+  - Please save if you want continued access.
+
+---
+
+### Review: Graphical Encoding
+
+.center[
+&lt;img src="https://krisrs1128.github.io/stat436_s24/posts/2024-12-27-week03-02/2024-12-27-week03-02_files/figure-html5/unnamed-chunk-10-1.png" width=850/&gt;
+]
+
+---
+
+### Review: Graphical Encoding
+
+* Grammar of graphics: Make it easy to compose complex visualizations from simple parts
+* Compound Figures and Faceting: Coordinate multiple figure components to navigate related views.
+* Going Further
+  - [Grammar of Graphics](https://search.library.wisc.edu/catalog/9911035726302121) by Leland Wilkinson
+  - [Visualization Analysis and Design](https://search.library.wisc.edu/catalog/9911196629502121) by Tamara Munzner
+  - [Semiology of Graphics](https://search.library.wisc.edu/catalog/9910121754502121) by Jacques Bertin
+
+---
+
+### Review: Interactivity
+
+.center[
+&lt;iframe src="https://connect.doit.wisc.edu/content/f8d86e79-f2f6-41ed-807a-2d5ad61052ea/" allowfullscreen="" data-external="1" height=800 width=600&gt;&lt;/iframe&gt;
+]
+
+
+---
+
+### Review: Interactivity
+
+* Dynamic Linking: "Escape Flatland" by linking low-dimensional views. Just because we make plots on 2D screens doesn't mean we can't reason about higher dimensions.
+* Focus-plus-Context: Allow readers to navigate multiple scales of interest
+* Going Further
+  - [Design of Everyday Things](https://search.library.wisc.edu/catalog/9910706218202121) by Don Norman
+  - [Designing the User Interface]() by Shneiderman and Plaisant
+  - The [vega-lite](https://vega.github.io/vega-lite/) and [mosaic](https://idl.uw.edu/mosaic/) packages
+---
+
+### Review: Spatial and Temporal Data
+
+.center[
+&lt;img src="https://krisrs1128.github.io/stat436_s24/posts/2024-12-27-week07-03/2024-12-27-week07-03_files/figure-html5/unnamed-chunk-7-1.png" width=800/&gt;
+]
+
+---
+
+### Review: Spatial and Temporal Data
+
+* Data structures can make key properties clear: Temporal frequencies, spatial coordinates, ...
+* Visualization grammars can be extended to specific data modalities
+* Going Further
+  - IEEE Vis Workshops [Spatial](https://virtual.ieeevis.org/year/2022/session_full6.html), [Temporal](https://virtual.ieeevis.org/year/2022/session_full21.html)
+  - [How Maps Work](https://search.library.wisc.edu/catalog/999746716802121) by Allan MacEachern
+
+---
+
+### Review: Network and High-Dimensional Data
+
+.center[
+  &lt;img src="https://krisrs1128.github.io/stat436_s24/posts/2024-12-27-week08-02/2024-12-27-week08-02_files/figure-html5/unnamed-chunk-3-1.png" width=1100/&gt;
+]
+
+---
+
+### Review: Network and High-Dimensional Data
+
+* There are many network-specific encodings available: Node-link, adjacency, enclosure, ...
+* High-dimensional data often have low-dimensional structure, and this can be made visible using either linear (PCA) or nonlinear (UMAP) methods
+* Going Further
+  - [Interactive High-Dimensional Data Visualization](https://www.tandfonline.com/doi/abs/10.1080/10618600.1996.10474696) by Buja, Cook, Swayne
+  - [Diffusion Maps (PNAS)](https://www.pnas.org/action/oidcStart?redirectUri=%2Fdoi%2F10.1073%2Fpnas.0500334102) by Coifman et al.
+  - [Manifold Learning: What, How, and Why](https://doi.org/10.1146/annurev-statistics-040522-115238) by Meilă and Zhang
+
+---
+
+### Review: Text and Image Data
+
+.center[
+  &lt;img src="https://krisrs1128.github.io/stat436_s24/posts/2024-12-27-week11-3/2024-12-27-week11-3_files/figure-html5/unnamed-chunk-10-1.png" width=900/&gt;
+]
+
+---
+
+### Review: Text and Image Data
+
+* Text and images can be represented as high-dimensional vectors by models like Latent Dirichlet Allocation and Convolutional Neural Networks.
+* High-dimensional visualization can be used to navigate the resulting numericl representations.
+* Going Further
+  - [text package](https://r-text.org/) for text embedding and visualization
+  - [EBImage package](https://github.com/aoles/EBImage) for image manipulation
+
+---
+
+### Review: Prediction and Visualization
+
+.center[
+&lt;img src="https://krisrs1128.github.io/stat436_s24/posts/2024-12-27-week12-2/2024-12-27-week12-2_files/figure-html5/unnamed-chunk-2-1.png" width=900/&gt;
+]
+
+---
+
+### Review: Prediction and Visualization
+
+* Algorithms don't live in a vacuum. Visualization helps us understand models in context.
+* Visualization can make you a better machine learner 
+  - Stanford class story
+* Going Further
+  - [Distill Journal](https://distill.pub/)
+  - [MLVis Workshop](https://events.tuni.fi/mlvis/mlvis2024/)
+  - [VisXAI Workshop](https://visxai.io/)
+  - [MLSS Tutorial](https://docs.google.com/presentation/d/e/2PACX-1vT9niyHbIv29umb-p3jNHNvs0wpXwwnXvUdubiunV3J0N8O2E7cTrax4giBfPs-xDVnEdaHdN2Ui9Bd/embed?start=false&amp;loop=false&amp;delayms=60000&amp;slide=id.p) by Been Kim
+  - [Agency plus Automation (PNAS)](https://www.pnas.org/doi/10.1073/pnas.1807184115) by Jeff Heer
+  - STAT 992 (SP25) - Interpretable and Explainable Machine Learning
+
+---
+
+### Visualization Community
+
+UW Madison Courses: CS565/765, Geog378, ECON315, LIS677, LIS407/707
+* [Data Science Hub](https://datascience.wisc.edu/hub/)
+
+Online Resources:
+* [Observable](https://observablehq.com/explore)
+* [Nightingale Magazine](https://nightingaledvs.com/)
+* [Journal of Visualization and Interaction](https://journals.aau.dk/index.php/jovi/issue/view/466)
+* [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold)
+
+---
+
+### Conclusion
+
+1. Beyond the specific topics, remember the learning techniques: examples,
+tinkering, and visual explanations.
+1. Send me your favorite visualizations.
+1. There are many important problems that could benefit from careful reasoning
+about data. Use your skills to help!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
