@@ -1,0 +1,65 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+The data below measures properties of various Antarctic penguins.
+
+```{r, echo = TRUE}
+library(tidyverse)
+theme_set(theme_bw())
+penguins <- read_csv("https://uwmadison.box.com/shared/static/ijh7iipc9ect1jf0z8qa2n3j7dgem1gh.csv")
+```
+Create a single plot that makes it easy to answer both of these questions, (i)
+How is bill length related to bill depth within and across species? (ii) On
+which islands are which species found?
+
+* island
+* species
+* bill length
+* bill depth
+
+```{r}
+ggplot(penguins, aes(bill_length_mm, bill_depth_mm, col = species)) +
+    geom_point(size = 5) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 2) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 2, col = "black") +
+    facet_wrap(~ island) +
+    scale_color_brewer(palette = "Set2") +
+    labs(x = "Bill Length", y = "Bill Depth", col = "Species") +
+    theme(
+        axis.title = element_text(size = 24),
+        axis.text = element_text(size = 24),
+        strip.text = element_text(size = 24),
+        legend.title = element_text(size = 24),
+        legend.text = element_text(size = 24),
+        legend.position = "bottom"
+    )
+```
+
+```{r}
+ggplot(penguins, aes(bill_length_mm, bill_depth_mm, col = species)) +
+    geom_point(size = 5) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 2) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 2, col = "black") +
+    facet_wrap(~ island) +
+    scale_color_manual(values = c("#4abb2d", "#ea55a2", "#626be4")) +
+    labs(x = "Bill Length", y = "Bill Depth", col = "Species") +
+    theme(
+        axis.title = element_text(size = 24),
+        axis.text = element_text(size = 24),
+        strip.text = element_text(size = 24),
+        legend.title = element_text(size = 24),
+        legend.text = element_text(size = 24),
+        legend.position = "bottom"
+    )
+```
+
+```{r}
+ggplot(penguins) +
+    geom_boxplot(aes(species, bill_length_mm, fill = species))
+
+ggplot(penguins) +
+    geom_boxplot(aes(bill_length_mm, species, fill = species))
+```
