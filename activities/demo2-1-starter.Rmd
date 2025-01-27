@@ -6,6 +6,15 @@ date: "`r Sys.Date()`"
 
 ```{r}
 knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+th <- theme_classic() +
+    theme(
+        axis.text = element_text(size = 14),
+        legend.text = element_text(size = 14),
+        axis.title = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        strip.text = element_text(size = 20)
+    )
+theme_set(th)
 ```
 
 
