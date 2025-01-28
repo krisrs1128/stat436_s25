@@ -1,0 +1,62 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+library(tidyverse)
+th <- theme_classic() +
+    theme(
+        axis.text = element_text(size = 14),
+        legend.text = element_text(size = 14),
+        axis.title = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        strip.text = element_text(size = 20)
+    )
+theme_set(th)
+```
+
+
+[Plant Growth Experiment] This problem will give you practice with tidying a
+dataset so that it can be easily visualized. The data describe the height of
+several plants measured every 7 days. The plants have been treated with
+different amounts of a growth stimulant. The first few rows are printed below --
+`height.x` denotes the height of the plant on day `x`.
+
+```{r}
+library(tidyverse)
+plants <- read_csv("https://uwmadison.box.com/shared/static/qg9gwk2ldjdtcmmmiropcunf34ddonya.csv")
+plants
+```
+
+a. Propose an alternative arrangement of rows and columns that conforms to the
+tidy data principle.
+
+b. Implement your proposed arrangement from part (a).
+
+```{r}
+plants_long <- plants |>
+    pivot_longer(starts_with("height"), names_to = "time_raw", values_to = "height") |>
+    mutate(
+        time = as.integer(str_extract(time_raw, "[0-9]+"))
+    )
+
+plants_long
+ggplot(plants_long, aes(time, height, col = treatment)) +
+    geom_line(aes(group = interaction(plantid, treatment))) +
+    stat_smooth(method = "lm", se = FALSE, linewidth = 2) +
+    facet_wrap(~ treatment)
+
+plants_long |>
+    arrange(plantid, treatment)
+```
+
+c. Using the dataset from (b), design and implement a visualization showing the
+growth of the plants over time according to different treatments.
+
+```{r}
+plants_long
+interaction(plants_long$plantid, plants_long$treatment)
+```
