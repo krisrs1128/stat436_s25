@@ -10,7 +10,14 @@ knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
 
 ```{r}
 library(tidyverse)
-theme_set(theme_classic())
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
 ```
 
 [NCAA Trends] This [538

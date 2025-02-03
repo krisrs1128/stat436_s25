@@ -8,6 +8,19 @@ date: "`r Sys.Date()`"
 knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
 ```
 
+
+```{r}
+library(tidyverse)
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
+```
+
 [Multiple Weather Variables] In this problem, we will construct a compound
 figure to simultaneously visualize several weather variables in one display. The
 block below reads a dataset that includes temperature, precipitation, and wind
@@ -15,9 +28,6 @@ measurements for New York City and Seattle over the course of several years. It
 then then averages each variable for each day (1 - 365) in the year.
 
 ```{r}
-library(tidyverse)
-theme_set(theme_bw())
-
 weather <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/weather.csv") |>
   mutate(day_in_year = lubridate::yday(date)) |>
   group_by(location, day_in_year) |>
