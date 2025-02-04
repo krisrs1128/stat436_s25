@@ -1,0 +1,101 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
+```
+
+[NCAA Trends] This [538
+article](https://fivethirtyeight.com/features/louisiana-tech-was-the-uconn-of-the-80s/)
+describes NCAA women's college basketball team performance over time. Each team
+was assigned a score representing how successfully it played during each year
+from 1982 to the present. This overall score is contained in the "points" column
+below.
+
+```{r}
+ncaa <- read_csv("https://github.com/krisrs1128/stat992_f23/raw/main/exercises/ps1/ncaa_filtered.csv") 
+
+ncaa |>
+  arrange(school, year)
+```
+
+a. Derive new columns representing (i) the cumulative total number of points
+over time for each school (ii) the cumulative total number of points over
+time for a hypothetical team that earns 35 points a year.
+
+```{r}
+ncaa <- ncaa |>
+  group_by(school) |>
+  mutate(
+    baseline = 32 * (year - 1981),
+    total = cumsum(points)
+  )
+
+```
+
+
+b. Create a visualization that shows the running total number of points for
+each school over time. If you use faceting, ensure that facets are sorted in
+an informative way.
+
+```{r}
+ggplot(ncaa) +
+  geom_line(aes(year, total)) +
+  facet_wrap(~ reorder(school, -points))
+```
+
+c. Design a visualization that that compares each school's performance with
+that of the hypothetical team that averages 35 points per year. See the
+figure below for an example approach. Explain the strengths and weaknesses
+of your design and comment on a finding from your visualization.
+
+```{r}
+ggplot(ncaa) +
+  geom_step(aes(year, total)) +
+  geom_step(aes(year, baseline)) +
+  geom_rect(aes(
+    xmin = year, 
+    xmax = year + 1, 
+    ymin = baseline, 
+    ymax = total,
+    fill = total - baseline,
+    col = total - baseline
+  ), linewidth = 0.1) +
+  scale_fill_gradient2() +
+  scale_color_gradient2() +
+  facet_wrap(~ reorder(school, -points))
+```
+
+
+
+
+You could use geom_ribbon to fill the area in between, but it's hard to fill the area in
+between with a different color according to the difference. Instead, you could use
+geom_segment and 
+
+
+
+
+
+
+
+d. Note that the original data includes 250+ schools. Propose, but do not
+implement, a visualization of the full dataset that makes use of dynamic
+queries. What questions would the visualization answer? What would be the
+structure of interaction, and how would the display update when the user
+provides a cue?
