@@ -502,7 +502,7 @@ By the end of the class, you should be able to...
 
 ---
 
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1
 
@@ -527,7 +527,7 @@ df3 &lt;- df1 |&gt;
 ]
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1
 
@@ -549,7 +549,7 @@ theme_set(my_theme)
 ```
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1
 
@@ -563,7 +563,7 @@ ggplot(mtcars) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-5-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1
 
@@ -588,7 +588,7 @@ ggplot(mtcars) +
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 How does `str_extract` work?
@@ -597,7 +597,7 @@ How does `str_extract` work?
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 The plants demo used a regular expression ("regex") to extract the day number from the column names. 
@@ -613,7 +613,7 @@ str_extract("height.14", "[0-9]")
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 
@@ -627,7 +627,7 @@ str_extract("height.14", "[0-9]+")
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 
@@ -641,7 +641,7 @@ str_extract("height.14.test.21", "[0-9]+")
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 
@@ -658,7 +658,7 @@ Hint: https://regexr.com/ is useful for learning and testing regexes.
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 More details about `starts_with()` and `interaction()`?
@@ -667,7 +667,7 @@ More details about `starts_with()` and `interaction()`?
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 * `starts_with()` selects any columns that that match a condition. Here, it says which columns to collapse into a new "name" column.
@@ -684,7 +684,7 @@ to `plantid x treatment` combinations.
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1 
 
 
@@ -700,14 +700,14 @@ interaction(1:4, c("a", "b", "c"))
 ---
 
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 &lt;img src="figure/confusion/2-1-4.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 1. If we are going to apply the same data transformation to many datasets, then
@@ -726,7 +726,7 @@ table4b |&gt;
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 1. If we are going to apply the same data transformation to many datasets, then
@@ -747,14 +747,14 @@ pivot_fun(table4b, "population")
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 &lt;img src="figure/confusion/2-1-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
 
-exclude: true
+exclude: false
 ### Exercise Review 2 - 1
 
 These are age ranges! E.g., "1524" means ages "15 - 24."
@@ -785,7 +785,7 @@ head(who)
 
 ---
 
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1 
 
@@ -800,7 +800,7 @@ ggplot(plants_long) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-22-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review 2 - 1
 
@@ -877,7 +877,7 @@ furniture.
 * Sign-up with your team for one of the visualization shares.
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review [2 - 2]
 
@@ -906,7 +906,7 @@ head(ikea)
 ```
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review [2 - 2]
 
@@ -919,7 +919,7 @@ ggplot(ikea) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-25-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 
 ``` r
@@ -932,7 +932,7 @@ ggplot(ikea) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-26-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 b. Modify the plot in (a) so that categories are sorted from those with highest
 to lowest average prices.
@@ -948,7 +948,7 @@ ggplot(ikea) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-27-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 
 ``` r
@@ -962,7 +962,7 @@ ggplot(ikea) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-28-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 c. Color points according to whether they can be purchased online. If they
 cannot be purchased online, add a text label giving the name of that item of
@@ -984,17 +984,18 @@ ggplot(ikea) +
 &lt;img src="slides_files/figure-html/unnamed-chunk-29-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 
 ``` r
 library(ggrepel)
 ggplot(ikea, aes(reorder(category, price), price)) +
-  geom_jitter(data = filter(ikea, sellable_online), aes(col = sellable_online), size = 1, alpha = 0.6) +
-  geom_jitter(data = filter(ikea, !sellable_online), aes(col = sellable_online), size = 3) +
+  geom_jitter(aes(col = sellable_online, size = sellable_online, alpha = sellable_online)) +
   geom_text_repel(data = filter(ikea, !sellable_online), aes(label = name), size = 4) +
   labs(x = "Category of Furniture", y = "Price ($)", col = "Available Online?") +
   scale_color_manual(values = c("#400202", "#0596A6")) +
+  scale_size_discrete(range = c(3, 1), guide = FALSE) +
+  scale_alpha_discrete(range = c(1, 0.4), guide = FALSE) +
   scale_y_log10() +
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1),
@@ -1018,10 +1019,7 @@ By the end of class today, you should be able to,
 ### In-Class Discussion [3 - 1]
 
 * On the Canvas link, response to *one* of the two prompt options.
-* The first prompt is related to the code demo we will work through. The second
-is related to the reading and notes for the week.
-* Discuss and answer the prompts with your project group. Include your project
-group number next to  your answer.
+* Answer the prompts with the people sitting near you. Include your names next to your response.
 
 ---
 
@@ -1036,8 +1034,6 @@ Live Demos: https://go.wisc.edu/6yuq9m
 ### In-Class Exercise [3 - 1]
 
 * Submit an answer to [Ikea Faceting] from the exercises sheet. Provide a brief explanation for your selection.
-* We only need one submission per project group -- make sure to name all your
-team members in the submission.
 * Note: This is an example of a past midterm problem.
 
 ---
@@ -1052,11 +1048,6 @@ team members in the submission.
 
 ## Announcements
 
-* Deadline for Project Milestone 0 (forming teams) extended to Friday 11:59pm.
-  - At that time, we will randomly assign students who are not in groups
-  - If you want to to be randomly assigned before then, please let me know
-* If you have a team, please sign up on the Visualization Shares schedule
-  - Please make sure any relevant links are on the sign-up sheet
 * Upcoming Deadlines
   - Project Milestone 1
   - HW1
