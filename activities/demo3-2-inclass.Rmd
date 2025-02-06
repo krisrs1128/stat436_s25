@@ -1,0 +1,111 @@
+---
+title: "Demo 3 - 2"
+output: 
+    html_document:
+        theme:
+            fg: "black"
+            bg: "white"
+            base_font:
+                google: "Quicksand"
+author: Kris Sankaran
+date: "`r Sys.Date()`"
+---
+
+output: rmdformats::readthedown
+css: custom.css
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
+```
+
+[Multiple Weather Variables] In this problem, we will construct a compound
+figure to simultaneously visualize several weather variables in one display. The
+block below reads a dataset that includes temperature, precipitation, and wind
+measurements for New York City and Seattle over the course of several years. It
+then then averages each variable for each day (1 - 365) in the year.
+
+```{r}
+weather <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/weather.csv") |>
+  mutate(day_in_year = lubridate::yday(date)) |>
+  group_by(location, day_in_year) |>
+  summarise(across(precipitation:wind, mean))
+```
+
+# Part a
+
+a. Construct three base `ggplot2` plots based on the variables that are
+provided. For example, you may construct a line plot (`geom_line`) of
+average precipitation, a histogram (`geom_histogram`) of per-city
+windspeeds, or a ribbon plot (`geom_ribbon`) of temperature ranges over
+time. Make sure to display at least two weather variables from among the
+four that are provided.
+
+
+```{r}
+weather
+
+p <- list()
+
+p[["wind"]] <- ggplot(weather) +
+  geom_histogram(
+    aes(wind, fill = location),
+    position = "identity",
+    alpha = 0.7
+  ) +
+  scale_y_continuous(expand = c(0, 0))
+
+p[["precipitation"]] <- ggplot(weather) +
+  geom_point(aes(day_in_year, precipitation, col = location)) +
+  theme(legend.position = "none")
+
+p[["temp"]] <- ggplot(weather) +
+  geom_ribbon(
+    aes(
+      day_in_year, 
+      ymin = temp_min, 
+      ymax = temp_max,
+      fill = location
+    ), alpha = 0.7) +
+    scale_x_continuous(expand = c(0, 0))
+```
+
+# Part b
+
+b. Design a compound figure based on the base plots in part (a). Why did you
+lay out the subplots in the locations that you did? Ensure that consistent
+visual encodings are used throughout, that legends are collected, and that
+clear but unobtrusive annotation is provided.
+
+```{r}
+library(patchwork)
+p[["wind"]] / p[["precipitation"]]
+
+
+p[["wind"]] + (p[["temp"]] / p[["precipitation"]])
+
+
+(p[["wind"]] + ((p[["temp"]] / p[["precipitation"]]) + plot_layout(heights = c(3, 1)))) +
+  plot_layout(guides = "collect", widths = c(1, 3))
+
+```
+
+c. Discuss, but do not implement, an alternative compound figure for the
+same data, with either different base plots or overall layout (or both). For
+which visual comparisons are either designs best suited?
+
+
+
+
