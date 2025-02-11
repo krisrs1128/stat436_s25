@@ -1018,7 +1018,7 @@ By the end of class today, you should be able to,
 
 ### In-Class Discussion [3 - 1]
 
-* On the Canvas link, response to *one* of the two prompt options.
+* On the Canvas link, response to the discussion prompt.
 * Answer the prompts with the people sitting near you. Include your names next to your response.
 
 ---
@@ -1053,7 +1053,7 @@ Live Demos: https://go.wisc.edu/6yuq9m
   - HW1
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review
 
@@ -1071,7 +1071,7 @@ p
 &lt;img src="slides_files/figure-html/unnamed-chunk-31-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review (Part (a))
 
@@ -1090,7 +1090,7 @@ p + facet_grid(category ~ .)
 ]
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review (Part (b))
 
@@ -1110,7 +1110,7 @@ p + facet_wrap(~ category)
 ]
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review (Part (c))
 
@@ -1124,7 +1124,7 @@ p + facet_wrap(~ category, scales = "free_y")
 &lt;img src="slides_files/figure-html/unnamed-chunk-34-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review (Part (d))
 
@@ -1136,7 +1136,7 @@ p + facet_wrap(~ category, axes = "separate")
 ```
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review (Part (e))
 
@@ -1191,13 +1191,11 @@ a brief explanation for your selection.
 
 ## Announcements
 
-* If your group did not already sign up on the visualization shares schedule, then you have been assigned a date.
 * Upcoming Deadlines
-  - HW1
-  - Project Milestone 2
+  - Project Milestone 1
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review
 
@@ -1219,7 +1217,7 @@ Freeing the `\(y\)`-axis scale has a big effect on the conclusions we draw. Even
 not misleading, the choice should be considered carefully
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review
 
@@ -1229,7 +1227,7 @@ False: `/` places panels on top of one another. To place them side by side, we
 can use `+`. 
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review
 
@@ -1239,7 +1237,7 @@ _When using the `patchwork` package, the `plot_layout` function can be used to c
 True: This can be done by calling `plot_layout(guides = "collect")`.
 
 ---
-exclude: true
+exclude: false
 
 ### Exercise Review
 
@@ -1279,14 +1277,32 @@ Live Demos: https://go.wisc.edu/6yuq9m
 
 ---
 
+### Example Projects
+
+Here are some past projects that were done very well:
+
+* [The British Museum](https://bedyvere.shinyapps.io/TheBritishMuseum/)
+* [TechQuake](https://farishazim02.shinyapps.io/G6_TechQuake_PM3/)
+* [Find Your College Match](https://krisrs1128.github.io/portfolio_site_436/education/2024/12/15/sidhuetal.html)
+* [COVID-19 Data Tracker](https://observablehq.com/@szhang577/stat-479-group-12)
+
+Notice how they (1) asked subtle questions of their data, (2) designed
+aesthetically appealing visualizations, and (3) avoided data science cliches
+("actionable insights").
+
+---
+
 ### In-Class Exercise [4 - 1]
 
-Right now, the dotplot responds to the year slider. However,
+The goal of this exercise is to help you learn to critique some hypothetical
+projects, to help get a sense of both the common traps and the potential for
+statistical creativity. For **two** of the project descriptions below, discuss:
 
-* The dotplot does not allow any user inputs.
-* There are selections besides year that might be relevant.
+* Measurements: What types of measurements are available, and are there any important features that aren't available? Do you think the measurement process was reliable or that the provided features are meaningful? Do you recommend that the team use this data or search for an alternative?
+* Relevance: Does the approach seem to answer the questions in which the authors are actually interested? Further, how broadly would the project's conclusions apply (e.g., to other populations)? Should they modify any questions?
+* Depth: What types of background will the authors need to develop so that they can study their problem in depth? How will you know that the project has succeeded and not simply given a superficial overview?
 
-Imagine someone came to your statistical consulting hours with this application.  They want your expertise to improve the app so that it conveys more information.  How would you approach this? What would be the reactive graph of your proposed implementation?
+Note that some of these questions are framed as Yes/No, but you can also argue that it lies in a grey area in between.
 
 ---
 
