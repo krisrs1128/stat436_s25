@@ -1181,7 +1181,6 @@ a brief explanation for your selection.
 
 ## Week 4 - 1
 
-1. Visualizations Share
 1. Exercise Review
 1. In-Class Discussion [4-1]
 1. In-Class Demo [4-1]
@@ -1400,13 +1399,13 @@ as it's embedded in the main write-up.
 
 In addition to printing to the R console or inserting a `browser()` call, you
 can create UI elements that print variables of interest.
-  * `verbatimOutput` will print arbitrary R objects to the shiny UI
+  * `verbatimTextOutput` will print arbitrary R objects to the shiny UI
   * Remind me to give examples during our demo today.
 
 
 ``` r
 server &lt;- function(input, output) {
-  output$debug &lt;- verbatimOutput({
+  output$debug &lt;- verbatimTextOutput({
     # intermediate data structure 
   })
 }
