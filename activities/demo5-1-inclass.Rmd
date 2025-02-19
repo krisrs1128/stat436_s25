@@ -1,0 +1,85 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(shiny)
+library(DT) # for shiny's table
+theme_set(theme_bw())
+```
+
+[Birds Brushed Scatterplot]. The
+[`birds`](https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/birds.csv)
+and `bird_summaries` datasets defined below give characteristics of the eggs
+laid by different species of birds. In this problem, you will build an
+interactive app to compare egg `Asymmetry` and `Ellipticity` across species and
+genera.
+
+```{r}
+birds <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat479_s22/main/exercises/data/birds.csv") |>
+    separate(Species, c("genus", "species2"))
+
+bird_summaries <- birds |>
+    group_by(genus) |>
+    summarise(
+    across(
+        c("Asymmetry", "Ellipticity",
+        "AvgLength (cm)", "Number of images",
+        "Number of eggs"),
+        list(
+            MEAN = mean, 
+            STANDARD_DEVIATION = sd)
+        )
+    ) |>
+    arrange(-Ellipticity_MEAN)
+```
+
+a. Create a scatterplot of `Asymmetry` vs. `Ellipticity` which supports
+brushing. Specifically, whenever the user brushes over a set of points in the scatterplot, they should be shown a table of the selected species. 
+
+Also, change the color of the currently brushed points, so that they stand out more clearly.
+
+```{r}
+scatter <- function(df, selected) {
+    palette <- c("#d4d4d4", "black")
+    df |>
+        mutate(selected_ = selected) |>
+        ggplot() +
+        geom_point(aes(Asymmetry, Ellipticity, color = as.factor(selected_))) +
+        scale_color_manual(values = palette)
+}
+
+ui <- fluidPage(
+  titlePanel("Birds Brushed Scatterplot"),
+  plotOutput("plot", brush = "myBrush"),
+  DTOutput("table")
+)
+
+server <- function(input, output) {
+  # initialize selected() to be a vector of 1 TRUE, the rest FALSE, with the same length as birds
+  selected <- reactiveVal(c(TRUE, rep(FALSE, nrow(birds)-1)))
+  observeEvent(
+    # first argument: what event are we looking for?
+    input$myBrush,
+    # second argument: a function/set of commands to do when that event happens
+    {
+    message("Hey, the brush moved")
+    bp = brushedPoints(birds, input$myBrush, allRows = TRUE)
+    selected(bp$selected_)
+    # could insert a browser() call here to check on what bp actually is
+    }
+  )
+  output$plot <- renderPlot(scatter(birds, selected()))
+  output$table <- renderDT(filter(birds, selected()))
+}
+
+shinyApp(ui, server)
+```
