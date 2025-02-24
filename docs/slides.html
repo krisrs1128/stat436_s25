@@ -1355,7 +1355,7 @@ guesses will be the exercise submission for today.
   * HW2
   * Project Milestone 2
 1. Midterm (in-class)
-  - Revieiwng the online course notes.
+  - Reviewing the online course notes.
   - Sketching solutions to problems from the exercise sheet.
   - Practice under time pressure.
 
@@ -1456,9 +1456,8 @@ these in the next lecture).
 ## Week 5 - 2
 
 1. Visualization Share
-1. Exercise Review
-1. In-Class Demo [5 - 2]
 1. In-Class Discussion [5 - 2]
+1. In-Class Demo [5 - 2]
 1. In-Class Exercise [5 - 2]
 
 ---
@@ -1477,6 +1476,31 @@ Visualization). The remaining modules are focused on specific data types.
 
 ---
 
+### Example Projects
+
+Here are some past projects that were done very well:
+
+* [The British Museum](https://bedyvere.shinyapps.io/TheBritishMuseum/)
+* [TechQuake](https://farishazim02.shinyapps.io/G6_TechQuake_PM3/)
+* [Find Your College Match](https://krisrs1128.github.io/portfolio_site_436/education/2024/12/15/sidhuetal.html)
+* [COVID-19 Data Tracker](https://observablehq.com/@szhang577/stat-479-group-12)
+
+Example portfolio submissions can be read here: https://krisrs1128.github.io/portfolio_site_436/
+
+Notice how they (1) asked subtle questions of their data, (2) designed
+aesthetically appealing visualizations, and (3) avoided data science cliches
+("actionable insights").
+
+---
+
+### Exercise 5 - 1
+
+IF you included ??? questions for Exercise 5 - 1, I left responses as comments
+on your Canvas submission. Feel free to ask questions during the Q&amp;A session or
+in reply to the online comment there.
+
+---
+
 ### Today
 
 By the end of class today, you should be able to,
@@ -1485,7 +1509,6 @@ By the end of class today, you should be able to,
 * Use brushes to query a histogram in a Shiny app.
 
 ---
-
 
 ### In-Class Discussion [5 - 2]
 
@@ -1502,6 +1525,28 @@ Live Demos: https://go.wisc.edu/6yuq9m
 
 ---
 
+### In-Class Discussion [5 - 2] (Bonus)
+
+Can you improve this visualization?
+
+
+``` r
+coffee &lt;- read_csv("https://go.wisc.edu/b34tma")
+coffee_counts &lt;- count(coffee, `What is your age?`, `How many cups of coffee do you typically drink per day?`)
+
+ggplot(coffee_counts) +
+  geom_col(aes(
+    `What is your age?`,
+    n,
+    fill = `How many cups of coffee do you typically drink per day?`
+  )
+)
+```
+
+&lt;img src="slides_files/figure-html/unnamed-chunk-39-1.png" width="650" style="display: block; margin: auto;" /&gt;
+
+---
+
 ### In-Class Exercise [5 - 2]
 
 Respond to [Graphical Queries Discussion] in the exercise sheet:
@@ -1512,6 +1557,7 @@ This problem asks you to share your understanding of the concept of graphical qu
 * Describe an example application that uses a graphical query. Give details of the interactivity patterns associated with your example.
 * Why is a graphical query appropriate in your example application? Contrast the graphical query approach with a non-graphical alternative.
 
+We will discuss potential responses in the last 5 minutes of class.
 
 ---
 
@@ -1526,15 +1572,14 @@ This problem asks you to share your understanding of the concept of graphical qu
 
 ### Announcements
 
-1. Milestone 1 grades and HW1 solutions are posted.
-  - We are happy to discuss milestones during exercise sessions or OH
 1. Upcoming Deadlines
-  - HW2
   - Project Milestone 2
+  - HW3
 1. The Midterm (in-class). A practice exam and solutions are on Canvas. 
-  - Revieiwng the online course notes.
+  - Reviewing the online course notes.
   - Sketching solutions to problems from the exercise sheet.
   - Practice under time pressure.
+1. OH on 3/7 rescheduled 2:30 - 4:30pm (shifted 30 minutes)
 
 ---
 
@@ -1571,7 +1616,7 @@ what the next step in the analysis is.
 
 ### In-Class Demo [6 - 1]
 
-We will work through as much of [Global Carbon Footprint Network] as we can.
+We will work through [Global Carbon Footprint Network].
 
 Live Demos: https://go.wisc.edu/6yuq9m
 
@@ -1580,21 +1625,23 @@ Live Demos: https://go.wisc.edu/6yuq9m
 ## Week 6 - 2
 
 1. Visualization Shares
+1. In-Class Discussion [6 - 2]
 1. In-Class Demo [6 - 2]
-1. In-Class Exercise [6 - 2]
+1. Midterm Review
 
 ---
 
 ### Announcements
 
 1. Upcoming Deadlines
-  1. HW2
   1. Project Milestone 2
+  1. HW3
 1. Midterm (in-class). A practice exam and solutions are on Canvas. 
   - Reviewing the online course notes.
   - Sketching solutions to problems from the exercise sheet.
   - Practice under time pressure.
   - Today is the last set of topics that could appear
+1. OH on 3/7 rescheduled 2:30 - 4:30pm (shifted 30 minutes)
 
 ---
 
@@ -1602,28 +1649,56 @@ Live Demos: https://go.wisc.edu/6yuq9m
 
 By the end of the class, you should be able to...
 
-* Compute and interpret time series features using the `feasts` package
-* Design and critique interactive visualizations based on time series features
+* Compute and interpret time series features using the `feasts` package.
+* Design and critique interactive time series visualizations.
+
+---
+
+### In-Class Discussion [6 - 2]
+
+Compare and contrast these two ways of showing changes in tech company stock
+prices, which is taken from Claus Wilke’s data visualization book. For both the
+left and right hand side approaches, respond to the prompts on the Canvas
+discussion link.
+
+&lt;center&gt;
+&lt;img src="figure/tech_stocks_comparison.png" width=700/&gt;
+&lt;/center&gt;
 
 ---
 
 ### In-Class Demo [6 - 2]
 
-We will work through [Global Carbon Footprint II].  Before we do this, work with
-your neighbors to prepare a design and pseudocode for part (b).
+We will work through [Global Carbon Footprint II].  We will also work together
+to prepare a design and sketch pseudocode before implementing the app.
 
 Live Demos: https://go.wisc.edu/6yuq9m
 
 ---
 
+### Midterm Review
+
+* With your team, respond to the prompts: https://go.wisc.edu/1n64ft
+  - Link also on Canvas
+
+* (Approximate) Schedule:
+  - 15 minutes for creating slides
+  - 10 minutes for sharing questions with another team
+  - 10 minutes for class Q&amp;A
+
+---
+
+exclude: true
+
 ### In-Class Exercise [6 - 2]
 
 * Work through parts (a - b) in the [Spotify Time Series I] problem on the
 exercise sheet.
-* You will get full credit if you make an honest attempt -- if you become stuck
-at some step, describe the difficulty that you encountered.
+* This exercise is optional, since the midterm exam is on Tuesday.
 
 ---
+
+exclude: false
 
 ## Week 7 - 1
 
@@ -1637,13 +1712,8 @@ at some step, describe the difficulty that you encountered.
 ### Announcements
 
 1. Upcoming Deadlines
-  1. HW2
   1. Project Milestone 2
-1. Midterm (in-class). A practice exam and solutions are on Canvas. To study, consider:
-  - Reviewing the online course notes.
-  - Sketching solutions to problems from the exercise sheet.
-  - Practice under time pressure.
-  - Covers material up to Week 6 - 4 notes
+  1. HW3
 
 ---
 exclude: true
@@ -1713,7 +1783,7 @@ exclude: true
 Filter to `region == "global"`, and make a `gg_season` plot by month. Comment
 on the what you see.
 
-&lt;img src="slides_files/figure-html/unnamed-chunk-41-1.png" width="650" style="display: block; margin: auto;" /&gt;
+&lt;img src="slides_files/figure-html/unnamed-chunk-42-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude: true
@@ -1779,7 +1849,7 @@ ggplot(songs_wide) +
     theme(legend.key.width = unit(1.5, "cm"))
 ```
 
-&lt;img src="slides_files/figure-html/unnamed-chunk-44-1.png" width="650" style="display: block; margin: auto;" /&gt;
+&lt;img src="slides_files/figure-html/unnamed-chunk-45-1.png" width="650" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1925,8 +1995,6 @@ spotify_features |&gt;
 
 ---
 
-exclude: true
-
 ### Today
 
 By the end of class today, you should be able to,
@@ -1936,7 +2004,6 @@ By the end of class today, you should be able to,
 frame.
 
 ---
-exclude: true
 
 ### In-Class Discussion [7 - 1]
 
@@ -1944,13 +2011,6 @@ Prompt: In your own words, explain the key characteristics of vector datasets.
 Why can't vector data simply be stored as `csv` files?
 
 Discussion link on Canvas.
-
----
-
-### Practice Midterm Review
-
-* With your team, respond to the prompts: https://go.wisc.edu/8m3vp0
-  - Link also on Canvas
 
 ---
 
@@ -1963,8 +2023,6 @@ Live Demos: https://go.wisc.edu/6yuq9m
 If we have time, we'll also show how to create a direct link to these data.
 
 ---
-
-exclude: true
 
 ### In-Class Exercise [7 - 1]
 
@@ -2031,18 +2089,15 @@ By the end of class today, you should be able to,
 1. Deadlines
   1. Project Milestone 2
   1. Project and Portfolio Peer Reviews
-  1. HW3
-1. Kris OH Rescheduled: 3:30 - 5:30pm this Friday 10/25
 
 ---
 
 ### Midterm Recap
 
 * Refer to the syllabus for our percent/percentile-based grading scheme
-* We were generally more forgiving with code-related issues relative to problems in definitions/discussion.
 
 .center[
-&lt;img src="figure/midterm.svg" width=650/&gt;
+&lt;img src="figure/" width=650/&gt;
 ]
 
 ---
