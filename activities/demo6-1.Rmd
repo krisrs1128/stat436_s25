@@ -12,7 +12,14 @@ knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
 library(tidyverse)
 library(tsibble)
 library(feasts)
-theme_set(theme_bw())
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
 ```
 
 [Global Carbon Footprint Network I] This problem studies a dataset of global
@@ -76,14 +83,29 @@ countries. What have you learned from your visualization?
 ```{r}
 ggplot(carbon_ts) +
   geom_line(aes(year, value, group = country))
+
+quantiles <- carbon_ts |>
+  as.data.frame() |>
+  group_by(country) |>
+  summarise(median_value = median(value)) |>
+  mutate(quantile = ntile(median_value, 8))
+
+carbon_ts |>
+  left_join(quantiles) |>
+  ggplot() +
+  geom_line(aes(year, value, group = country)) +
+  facet_wrap(~ quantile, nrow = 2)
 ```
 
 ```{r, fig.height = 12, fig.width = 6}
-ggplot(carbon_ts) +
+carbon_ts |>
+  left_join(quantiles) |>
+  filter(quantile < 6) |>
+  ggplot() +
   geom_tile(aes(year, reorder(country, value), fill = log(1 + value), col = log(1 + value))) +
   scale_fill_distiller(direction = 1) +
   scale_color_distiller(direction = 1) +
-  theme(axis.text.y = element_text(size = 6)) +
+  theme(axis.text.y = element_text(size = 12)) +
   scale_x_continuous(expand = c(0, 0))
 ```
 
