@@ -1,0 +1,123 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(tsibble)
+library(feasts)
+my_theme <- theme_classic() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.grid.minor = element_blank()
+  )
+theme_set(my_theme)
+```
+
+[Global Carbon Footprint Network I] This problem studies a dataset of global
+carbon emissions collected by the Global Carbon Footprint Network. It was the
+subject of a previous [course
+project](https://observablehq.com/@wang2274/milestone-4-team-4). We will first
+quality check and structure the raw data. Then, we'll try answering some time
+series questions visually.
+
+a. The first few rows of the dataset are printed below. Write down 
+two interesting questions that you think the dataset could help to answer.
+Refer to at least one of the following vocabulary terms: trend, seasonality,
+autocorrelation, cross-correlation, cyclic behavior.
+    
+```{r}
+carbon <- read_csv("https://go.wisc.edu/7qx7u1")
+head(carbon)
+
+carbon <- carbon |>
+  pivot_longer(-c("country", "Country Code"), names_to = "year")
+
+carbon
+```
+  
+b. Build a `tsibble` object from the data above. Discuss why it can be
+useful to convert the original `data.frame` object to this new `tsibble`
+class.
+
+```{r}
+  # duplicates(key = "country", index = "year") |>
+
+carbon_ts <- carbon |>
+  mutate(year = as.integer(year)) |>
+  filter(country != "Switzerland") |>
+  as_tsibble(key = "country", index = "year")
+```
+
+
+c. Create either a line or heatmap visualization of the time series across all
+countries. What have you learned from your visualization?
+
+```{r}
+carbon_ts
+
+carbon_ts |>
+  as.data.frame() |>
+  group_by(country) |>
+  ggplot() +
+  geom_line(aes(year, value, group = country))
+
+ggplot(carbon_ts) +
+  geom_line(aes(year, value, group = country))
+```
+
+```{r}
+carbon_groups <- carbon_ts |>
+  as_tibble() |>
+  group_by(country) |>
+  summarise(median_value = median(value)) |>
+  mutate(median_group = ntile(median_value, 8))
+
+carbon_ts |>
+  left_join(carbon_groups) |>
+  ggplot() +
+  geom_line(aes(year, value, group = country)) +
+  facet_wrap(~ median_group, scales = "free_y")
+```
+
+
+```{r}
+carbon_groups
+
+
+carbon_ts |>
+  left_join(carbon_groups) |>
+  #filter(median_group > 6) |>
+  ggplot() +
+  geom_tile(aes(
+    year, 
+    reorder(country, value),
+    fill = log(1 + value),
+    col = log(1 + value)
+    )) +
+    scale_fill_distiller(direction = 1) +
+    scale_color_distiller(direction = 1)
+```
+
+d. Create a lag plot of the series for the United States. How do you
+interpret this figure?
+
+e. Create a lineplot across all countries after taking a moving aver
+neighboring years. What are the advantages and disadvantages of smoothing
+the original line plot?
+
+```{r}
+library(slider)
+#smoothed_carbon <- carbon_ts |>
+#  group_by(country) |>
+#  mutate(smoothed = slide_dbl(value, mean, .before = 5, .after = 5))
+```
+
