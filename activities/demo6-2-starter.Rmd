@@ -16,6 +16,7 @@ library(plotly)
 library(slider)
 library(shiny)
 theme_set(theme_bw())
+color_pal <- c("#B0D1D9", "#273859")
 ```
 
 [Global Carbon Footprint Network II] This problem creates interactive versions
@@ -38,6 +39,9 @@ smoothed_carbon <- carbon_ts |>
   group_by(country) |>
   mutate(smoothed = slide_dbl(value, ~ mean(.), .before = 5, .after = 5)) |>
   ungroup()
+
+ggplot(smoothed_carbon) +
+  geom_line(aes(year, smoothed, group = country))
 ```
 
 b. Propose an interactive time series visualization that graphically queries a
