@@ -13,7 +13,18 @@ library(sf)
 library(tmap)
 library(tidyverse)
 library(ceramic)
-theme_set(theme_bw())
+
+# code to set a clean theme
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#F7F7F7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
 ```
 
 [Glacial Lakes]. The data at this [link](https://raw.githubusercontent.com/krisrs1128/stat436_s23/main/data/GL_3basins_2015.topojson) contain labels of glacial lakes the
