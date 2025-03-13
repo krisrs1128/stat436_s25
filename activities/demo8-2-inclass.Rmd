@@ -1,0 +1,116 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r}
+library(tidyverse)
+library(tidygraph)
+library(ggraph)
+```
+
+1. [Movie Genres] How do movie genres relate to one another? Is romance + comedy
+a more common combination than fantasy + adventure? We will use the dataset
+[here](https://github.com/krisrs1128/stat436_s24/raw/main/data/movie_links.csv)
+to answer these questions, using a node-link diagram inspired by (but much
+simpler than) the [film flowers](https://observablehq.com/@sxywu/introduction-to-svg-and-d3-js) project
+by Shirley Wu.
+
+a. Build a `tbl_graph` containing the movies and their links.
+
+b. Create a node-link diagram to represent the connections between movies and
+their genres.
+
+c. A list of all the genres in this network is available
+[here](https://github.com/krisrs1128/stat992_f23/blob/main/activities/week9/genres.csv).
+Design a strategy to distinguish between genres and movies, and justify your
+choice of visual encodings. _Hint: Mutate the nodes in the `tbl_graph`._
+
+
+```{r}
+edges <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat436_s24/main/data/movie_links.csv")
+genres <- read_csv("https://raw.githubusercontent.com/krisrs1128/stat436_s24/main/data/genres.csv")
+edges <- read_csv("~/Downloads/movie_links.csv")
+genres <- read_csv("~/Downloads/genres.csv")
+```
+
+```{r}
+edges
+
+G <- tbl_graph(edges = edges)
+
+ggraph(G, "kk") +
+    geom_edge_link(edge_color = "#e4e4e4", edge_width = 0.9) +
+    geom_node_text(aes(label = name)) +
+    theme_void()
+```
+
+
+```{r}
+G <- G |>
+    mutate(is_genre = name %in% genres$genre)
+
+ggraph(G, "kk") +
+    geom_edge_link(edge_color = "#e4e4e4", edge_width = 0.9) +
+    geom_node_text(aes(label = name, size = is_genre)) +
+    scale_size_discrete(range = c(5, 10)) +
+    theme_void()
+
+
+```
+
+
+1. [Climate Crisis Youtube recommendations] We will study a
+[dataset](https://observablehq.com/@emma-ba/youtube-recommendation-network-on-the-climate-crisis)
+giving links between Youtube videos related to the climate crisis.  The data
+were gathered by simulating a user browsing through recommendations, after
+having initially searched using a set of climate-related seed terms. Each node
+is a video, which includes features like the number of views and the channel it
+belongs to. Each edge provides an algorithmically generated recommendation.
+
+a. Build a `tbl_graph` from the provided [node](https://github.com/krisrs1128/stat992_f23/raw/main/activities/week9/climate-nodes.csv) and [edge](https://github.com/krisrs1128/stat992_f23/raw/main/activities/week9/climate-edges.csv) data.
+
+b. Visualize the connections between videos as a node-link diagram. Color nodes in by the simulated browser session.
+
+c. Visualize the connections between videos as an adjacency matrix.
+
+d. Compare and contrast the visualizations in parts (b) and (c). What are
+some of the trade-offs associated with using one view vs. the other?
+
+e. Select a small number of channels of interest (e.g., "The Daily Show with
+Trevor Noah") For either parts (b) or (c), find a way to visually
+distinguish nodes belonging to these channels from the rest.
+
+```{r}
+nodes <- read_csv("https://github.com/krisrs1128/stat436_s25/raw/main/data/climate-nodes.csv")
+edges <- read_csv("https://github.com/krisrs1128/stat436_s25/raw/main/data/climate-edges.csv")
+
+nodes <- read_csv("~/Downloads/climate-nodes.csv")
+edges <- read_csv("~/Downloads/climate-edges.csv")
+
+G <- tbl_graph(nodes, edges)
+# G <- G |>
+#     filter(row_number() < 100)
+
+G |>
+    as_tibble() |>
+    count(session)
+
+G <- G |>
+    mutate(session_grouped = fct_lump_n(session, 5))
+
+# node link plot
+ggraph(G) +
+    geom_edge_link(edge_color = "#e4e4e4", edge_width = 0.9) +
+    geom_node_point(aes(col = session_grouped), size = 5) +
+    theme_void()
+```
+
+
+```{r}
+ggraph(G, "matrix") +
+    geom_edge_tile() +
+    geom_node_point(aes(col = session_grouped), size = 5, x = 0) +
+    theme_void()
+```
