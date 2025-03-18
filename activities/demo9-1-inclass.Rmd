@@ -1,0 +1,113 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c"),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    strip.text = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+    
+1. [Polio Clustering] The polio dataset contains weekly counts of new polio
+cases across each state in the United States, starting as early as 1912. In this
+question, our goal is to apply $K$-means to group states with similar incidence
+patterns.
+
+```{r}
+polio <- read_csv("https://uwmadison.box.com/shared/static/nm7yku4y9q7ylvz5kbxya3ouj2njd0x6.csv")
+head(polio)
+```
+  
+a. Is it necessary to reshape the data before it can be used in the
+`kmeans` function? If so, provide the code. If not, provide a brief
+explanation.
+
+```{r}
+x <- polio |>
+  pivot_wider(names_from = period_start_date, values_from = cases, values_fill = 0)
+
+x
+```
+
+b. Let `x` contain the output from part (a). Compare the two
+approaches to $K$-means in the code block below. Which would you recommend
+using? Justify your choice.
+  
+  Option 1:
+```{r, eval = FALSE}
+x |>
+  select(-state) |>
+  kmeans(centers = 5)
+```
+          
+  Option 2:
+
+```{r, eval = FALSE}
+x |>
+  select(-state) |>
+  scale() |>
+  kmeans(centers = 5)
+```
+    
+    Option 3:
+    
+```{r, eval = FALSE}
+fit <- x |>
+  select(-state) |>
+  t() |>
+  scale() |>
+  t() |>
+  kmeans(centers = 10)
+```
+
+c. Provide code needed for extracting and visualizing centroids
+from the $K$-means fit made in part (b). Draw a rough sketch of the expected
+result and include annotations that would help a reader understand the output.
+
+Let's first visualize the cluster centroids.
+
+```{r}
+library(tidymodels)
+centroids <- tidy(fit) |>
+  pivot_longer(starts_with("19"), names_to = "date") |>
+  mutate(date = as_date(date))
+  
+  
+# make a scatterplot of the reshaped centroid data
+ggplot(centroids) +
+  geom_point(aes(date, log(1 + value)), size = 0.4) +
+  scale_y_continuous(expand = c(0, 0)) +
+  facet_wrap(~ reorder(cluster, value), nrow = 3)
+```
+
+This groups the raw time series according to their cluster membership.
+
+```{r}
+library(scico)
+x_clust <- augment(fit, x)
+
+x_clust |> 
+  pivot_longer(starts_with("19"), names_to = "date") |>
+  mutate(date = as_date(date)) |>
+  ggplot() +
+    geom_tile(aes(date, reorder(state, value), col = log(1 + value), fill = log(1 + value)), width = 7) +
+    facet_grid(reorder(.cluster, -value) ~ ., scales = "free_y", space = "free_y") +
+    scale_fill_scico(palette = "berlin") +
+    scale_color_scico(palette = "berlin")
+ 
+```
