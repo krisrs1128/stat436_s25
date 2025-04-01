@@ -1,0 +1,86 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c"),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 24),
+    strip.text = element_text(size = 24),
+    legend.position = "bottom",
+  )
+theme_set(th)
+```
+
+[Food nutrients] This problem will use PCA to provide a low-dimensional view
+of a 14-dimensional nutritional facts
+[dataset](https://uwmadison.box.com/shared/static/nmgouzobq5367aex45pnbzgkhm7sur63.csv).
+The data were originally curated by the USDA and are regularly used in
+[visualization studies](http://bl.ocks.org/syntagmatic/raw/3150059/).
+    
+```{r}
+nutrients <- read_csv("https://uwmadison.box.com/shared/static/nmgouzobq5367aex45pnbzgkhm7sur63.csv")
+nutrients
+```
+    
+a. Define a tidymodels `recipe` that normalizes all nutrient features and run PCA.
+
+```{r}
+pca_recipe <- recipe(~ ., data = nutrients) |>
+  update_role(name, id, group, group_lumped, new_role = "id") |>
+  step_normalize(all_predictors()) |>
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_recipe)
+```
+
+b. Visualize the top 6 principal components. What types of food do you expect to
+have low or high values for PC1 or PC2?
+
+```{r, fig.width = 10, fig.height = 8}
+tidy(pca_prep, 2) |>
+  filter(component %in% paste0("PC", 1:6)) |>
+  ggplot() +
+    geom_col(aes(value, terms)) +
+    facet_wrap(~ component) +
+    theme(
+      axis.text = element_text(size = 16),
+      strip.text = element_text(size = 16),
+      axis.title = element_text(size = 20)
+    )
+
+```
+
+c. Compute the average value of PC2 within each category of the `group` column.
+Give the names of the groups sorted by this average.
+
+```{r}
+```
+
+d. Visualize the scores of each food item with respect to the first two
+principal components. Facet the visualization according to the `group` column,
+and sort the facets according to the results of part (c). How does the result
+compare with your guess from part (b)?
+
+```{r}
+theme_set(theme_classic())
+scores <- bake(pca_prep, nutrients)
+ggplot(scores) +
+  geom_hline(yintercept = 0, linewidth = 1) +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  geom_point(aes(PC1, PC2, col = group_lumped)) +
+  scale_color_brewer(palette = "Set3") +
+  facet_wrap(~ reorder(group, PC2))
+```
