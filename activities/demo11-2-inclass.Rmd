@@ -1,0 +1,117 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+library(tidyverse)
+library(topicmodels)
+library(tidytext)
+
+th <- theme_minimal() + 
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#f7f7f7"),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    legend.position = "bottom"
+  )
+theme_set(th)
+```
+
+[Hotel Reviews] In this problem, we will practice using Latent Dirichlet
+Allocation to understand the topics that come up across hotel reviews from an
+online database. We will also study whether there are certain topics that are
+more common in positive vs. negative reviews.
+
+a. Transform the raw reviews into a collection of per-review word counts.
+Remove stopwords from across all lexicons in `tidytext::stopwords`.
+
+```{r}
+reviews <- read_csv("https://github.com/krisrs1128/stat436_f24/raw/refs/heads/main/data/reviews.csv")
+reviews_dtm <- reviews |>
+  unnest_tokens(word, Review) |>
+  filter(!(word %in% stop_words$word)) |>
+  count(document, word) |>
+  cast_dtm(document, word, n)
+```
+    
+b. Convert the `data.frame` from (a) into a topic models Document-Term
+matrix (i.e., an object of class `DocumentTermMatrix`). Fit an LDA model
+with 8 topics to the prepared object.
+
+```{r}
+fit <- LDA(reviews_dtm, k = 8)
+
+```
+
+c. Create a heatmap of topic distributions for the 50 words $d$ with the
+largest inter-quartile across topics (i.e., largest IQR for
+$\left(\beta_{dk}\right)_{k = 1}^{8}\right)$. Provide an interpretation for
+one of the topics, based on the words that have high probability within it.
+
+```{r}
+topics <- tidy(fit, "beta")
+
+beta_summary <- topics |>
+  group_by(term) |>
+  summarise(beta_iqr = IQR(beta))
+
+top_terms <- beta_summary |>
+  arrange(-beta_iqr) |>
+  head(n = 50) |>
+  pull(term)
+
+top_terms
+
+library(superheat)
+topics_matrix <- topics |>
+  filter(term %in% top_terms) |>
+  pivot_wider(names_from = term, values_from = beta) |>
+  column_to_rownames("topic") |>
+  t()
+
+superheat(topics_matrix[top_terms, ])
+
+```
+
+
+d. Create a Structure plot displaying the topic memberships for each review.
+Sort reviews according to their order on a hierarchical clustering tree, and
+facet documents according to hotel rating. Are there certain topics that
+appear to be more common in negative vs. positive reviews?
+
+```{r}
+reviews_clean <- reviews |>
+  mutate(document = factor(document))
+
+memberships <- tidy(fit, "gamma") |>
+  left_join(reviews_clean)
+
+fit@gamma
+
+clustering_result <- hclust(dist(fit@gamma))
+sorted_ids <- fit@documents[clustering_result$order]
+
+memberships <- memberships |>
+  mutate(document = factor(document, levels = sorted_ids))
+
+
+
+ggplot(memberships) +
+  geom_col(aes(
+    document, gamma, fill = factor(topic), col = factor(topic)
+  )) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_color_brewer(palette = "Set2") +
+  facet_grid(~ Rating, scales = "free_x", space = "free_x") +
+  theme(axis.text.x = element_blank())
+```
