@@ -10,13 +10,14 @@ knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
 
 ```{r}
 library(tidyverse)
-library(keras)
+library(superheat)
+library(keras3)
 
-th <- theme_minimal() + 
+th <- theme_minimal() +
   theme(
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "#f7f7f7"),
-    panel.border = element_rect(fill = NA, color = "#0c0c0c", size = 0.6),
+    panel.border = element_rect(fill = NA, color = "#0c0c0c", linewidth = 0.6),
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 16),
     legend.position = "bottom"
@@ -53,18 +54,16 @@ layers. Design and implement a visualization that shows the predicted
 probabilities for each sample after the model has converged.
 
 ```{r}
-library(keras)
 model <- keras_model_sequential() |> 
-  layer_dense(units = 20, activation = "relu", input_shape = c(2)) |> 
-  layer_dense(units = 20, activation = "relu", input_shape = c(20)) |> 
-  layer_dense(units = 20, activation = "relu", input_shape = c(20)) |> 
+  layer_dense(units = 20, activation = "relu") |>
+  layer_dense(units = 20, activation = "relu") |>
+  layer_dense(units = 20, activation = "relu") |>
   layer_dense(2, activation = "softmax")
 model |> 
   compile(optimizer = "adam", loss = "categorical_crossentropy") |>
   fit(
     x = simulation |> select(starts_with("x")) |> as.matrix(),
     y = to_categorical(simulation$y),
-    metric = "accuracy",
     epochs = 60,
     verbose = 0
   )
@@ -88,7 +87,7 @@ activations for a single neuron behave, as a function of the input $x$
 coordinates. Make the analogous visualization for a deeper layer.
 
 ```{r}
-submodel <- keras_model(model$input, model$layers[[1]]$output)
+submodel <- keras_model(model$inputs, model$layers[[1]]$output)
 x_grid <- seq(-4.5, 4.5, length.out = 50)
 x_grid <- expand.grid(x_grid, x_grid)
 x_grid$h <- predict(submodel, as.matrix(x_grid))[, 2]
