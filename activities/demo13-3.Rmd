@@ -25,10 +25,7 @@ sentence.
 ```{r}
 model_name <- "llama3.2:1b"
 reviews <- read_csv("https://github.com/krisrs1128/stat436_f24/raw/refs/heads/main/data/reviews.csv")
-
-tmp <- Sys.time()
 z <- embed_text(reviews$Review, model = model_name, verbose = TRUE)
-Sys.time() - tmp
 ```
 
     b. Create a two-dimensional UMAP scatterplot of the extracted embeddings.
@@ -46,7 +43,6 @@ scores <- juice(umap_result) |>
 p <- ggplot(scores, aes(UMAP1, UMAP2, text = Review, col = factor(Rating))) +
     geom_point()
 ```
-
 
     c. Prepare an interactive visualization that allows the reader to brush
     points on the UMAP scatterplot to reveal the associated review text. Can you

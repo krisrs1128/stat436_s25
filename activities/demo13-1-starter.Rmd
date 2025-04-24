@@ -42,6 +42,9 @@ y <- rowSums(x ^ 2) < 1
 flip_ix <- sample(N, N / 20) # 5% unavoidable error
 y[flip_ix] <- !y[flip_ix]
 simulation <- data.frame(x = x, y = y)
+
+ggplot(simulation) +
+  geom_point(aes(x.1, x.2, col = y), size = 2)
 ```
 
 b. The block below defines and fits a deep learning model with three hidden
@@ -59,7 +62,7 @@ model |>
   fit(
     x = simulation |> select(starts_with("x")) |> as.matrix(),
     y = to_categorical(simulation$y),
-    epochs = 60,
+    epochs = 100,
     verbose = 0
   )
 ```
@@ -67,6 +70,14 @@ model |>
 ```{r}
 x_grid <- seq(-4.5, 4.5, length.out = 50)
 x_grid <- expand.grid(x_grid, x_grid)
+
+x_grid$y_hat <- predict(model, as.matrix(x_grid))[, 2]
+
+ggplot(x_grid) +
+  geom_tile(aes(Var1, Var2, fill = y_hat)) +
+  geom_point(data = simulation, aes(x.1, x.2, col = factor(y)), size = 3) +
+  scale_fill_distiller(direction = 1)
+  #scale_color_distiller(direction = 1)
 ```
 
 c. The block below defines a `keras` model that can be used to extract
@@ -76,10 +87,18 @@ activations for a single neuron behave, as a function of the input $x$
 coordinates. Make the analogous visualization for a deeper layer.
 
 ```{r}
-submodel <- keras_model(model$inputs, model$layers[[1]]$output)
+submodel <- keras_model(model$inputs, model$layers[[2]]$output)
 x_grid <- seq(-4.5, 4.5, length.out = 50)
 x_grid <- expand.grid(x_grid, x_grid)
+x_grid$h <- predict(submodel, as.matrix(x_grid))[, 2]
+
+ggplot(x_grid) +
+  geom_tile(aes(Var1, Var2, fill = h)) +
+  geom_point(data = simulation, aes(x.1, x.2, col = factor(y)), size = 3) +
+  scale_fill_distiller(direction = 1)
+
 ```
+
 
 d. Generate a heatmap of activations across all neurons from some layer of
 the model. Comment on the structure of the learned features.
