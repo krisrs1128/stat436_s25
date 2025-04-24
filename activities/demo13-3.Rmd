@@ -1,0 +1,76 @@
+---
+title: Demo 13
+---
+
+```{r}
+library(embed)
+library(rollama)
+library(shiny)
+library(tidymodels)
+library(tidyverse)
+set.seed(20250424)
+```
+
+1. [Hotel Review Embeddings] This problem revisits the
+[dataset](https://github.com/krisrs1128/stat436_f24/raw/refs/heads/main/data/reviews.csv)
+from [Hotel Reviews]. Instead of using Latent Dirichlet Allocation, we will use
+the embeddings from a Large Language Model. The advantage of this approach is
+that it doesn't reduce each review into a "bag of words" -- the full context of
+each word is considered when determining a latent representation for teh
+sentence.
+
+    a. Use the `embed_text` function from `rollama` to extract model embeddings
+    from the `llama3.2:1b` model. What is the embedding dimension of this model?
+
+```{r}
+model_name <- "llama3.2:1b"
+reviews <- read_csv("https://github.com/krisrs1128/stat436_f24/raw/refs/heads/main/data/reviews.csv")
+
+tmp <- Sys.time()
+z <- embed_text(reviews$Review, model = model_name, verbose = TRUE)
+Sys.time() - tmp
+```
+
+    b. Create a two-dimensional UMAP scatterplot of the extracted embeddings.
+    Color each point by the review's final ratings. Do the embeddings seem to
+    capture qualities related to the overall review rating? Why or why not?
+
+```{r}
+rec <- recipe(~ ., data = z) |>
+    step_umap(all_predictors(), neighbors = 25)
+
+umap_result <- prep(rec)
+scores <- juice(umap_result) |>
+    bind_cols(reviews)
+
+p <- ggplot(scores, aes(UMAP1, UMAP2, text = Review, col = factor(Rating))) +
+    geom_point()
+```
+
+
+    c. Prepare an interactive visualization that allows the reader to brush
+    points on the UMAP scatterplot to reveal the associated review text. Can you
+    identify differences between reviews even among those with the same rating?
+
+```{r}
+ui <- fluidPage(
+    plotOutput("scatterplot", brush = "plot_brush"),
+    tableOutput("reviews")
+)
+
+server <- function(input, output, session) {
+    selected <- reactiveVal(rep(FALSE, nrow(reviews)))
+    
+    output$scatterplot <- renderPlot(p)
+    observeEvent(input$plot_brush, {
+        ix <- brushedPoints(scores, input$plot_brush, allRows = TRUE)$selected_
+        selected(ix)
+    })
+    
+    output$reviews <- renderTable({
+        reviews$Review[which(selected())]
+    })
+}
+
+shinyApp(ui, server)
+```
